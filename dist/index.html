@@ -4,24 +4,36 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blue Waters Resort & Spa</title>
+  <title>TAYLOR BAY BEACH CLUB</title>
 </head>
 <header>
   <div class="title-container">
-    <h1 class="title">Blue Waters Resort & Spa</h1>
+    <img class="star-fish" src="./images/star-fish.png" alt="blue star fish" height="100em">
+    <h1 class="title">TAYLOR BAY BEACH CLUB</h1>
+    <button class="sign-in-button" id="sign-in-button">My Profile</button>
   </div>
   <nav>
-    <button id="login-button">Sign In</button>
-  </nav>
-  <nav>
-    <menu>
-      <li><button id="reservation-button">Reservations</button></li>
-      <li><button id="yearly-expense-button">Yearly Expense</button></li>
+    <!-- <button class="sign-in-button" id="sign-in-button">My Profile</button> -->
+    <menu class ="menu-buttons">
+      <button class="reservation-button hidden" id="reservation-button">Reservations</button>
+      <button class="yearly-expense-button hidden" id="yearly-expense-button">Rewards Status</button>
+      <button class="check-rates-button hidden" id="check-rates-button hidden">CHECK RATES</button>
     </menu>
   </nav>
-  <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="700em" width="100%">
+  <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="600em">
 </header>
 <body>
+  <main class ="login-holder hidden" id="login-holder">
+    <h1 id="login-header">Welcome back.</h1>
+    <div id="login-error-msg-holder">
+      <p id="login-error-msg">Your username and/or password was not found in our records. <span id="error-msg-second-line">Please try signing in again. </span></p>
+    </div>
+    <form id="login-form">
+      <input type="text" name="username" id="username-field" class="login-form-field" placeholder="Username">
+      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
+      <input type="submit" value="Sign In" id="login-form-submit">
+    </form>
+  </main>
   <!-- <img src="./images/turks-and-caicos-providenciales-grace-bay.png" alt="turing logo"> -->
   
     <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
