@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webpack Starter Kit</title>
+  <title>Blue Waters Resort & Spa</title>
 </head>
+<header>
+  <div class="title-container">
+    <h1 class="title">Blue Waters Resort & Spa</h1>
+  </div>
+  <nav>
+    <button id="login-button">Sign In</button>
+  </nav>
+  <nav>
+    <menu>
+      <li><button id="reservation-button">Reservations</button></li>
+      <li><button id="yearly-expense-button">Yearly Expense</button></li>
+    </menu>
+  </nav>
+  <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="700em" width="100%">
+</header>
 <body>
-  <img src="./images/turing-logo.png" alt="turing logo">
+  <!-- <img src="./images/turks-and-caicos-providenciales-grace-bay.png" alt="turing logo"> -->
   
-  <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
+    <!-- Do not include the scripts.js or class files here - it is done by the webpack server -->
   <script src="bundle.js"></script>
-
 </body>
 </html>
