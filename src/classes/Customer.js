@@ -1,5 +1,5 @@
-class Customer {
-  constructor() {}
-}
+// class Customer {
+//   constructor() {}
+// }
 
-export default Customer;
+// export default Customer;
