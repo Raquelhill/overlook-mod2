@@ -21,4 +21,4 @@ const sampleCustomerData = [
   },
 ];
 
-export default sampleUserData;
+export default sampleCustomerData;
