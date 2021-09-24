@@ -14,12 +14,11 @@ header {
 
 h1 {
   padding-left: 2%;
-  padding-top: 1%;
 }
 
 body {
   margin: 0;
-  font-family: Helvetica, sans-serif;
+  font-family: 'Lato', sans-serif;
   display: grid;
   justify-items: center;
   align-items: center;
@@ -28,6 +27,12 @@ body {
 
 .title-container {
   display: flex;
+  align-items: flex-end;
+}
+
+.star-fish {
+  padding-left: 2%;
+  margin-top: 2%;
 }
 
 .login-holder {
@@ -101,8 +106,8 @@ body {
 }
 
 .sign-in-button {
-  margin-left: 50%;
-  margin-bottom: 3%;
+  margin-left: 68%;
+  margin-bottom: 4%;
   background-color: white;
   border: none;
   font-size: 1.1rem;

@@ -8,12 +8,12 @@ import './css/base.scss';
 import './images/turks-beach.png';
 import './images/star-fish.png';
 
-import APIRequests from './apiCalls';
+// import APIRequests from './apiCalls';
 import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
 
 // fetch calls & data variables
-// import { fetchData, postData, deleteData } from './apiCalls';
+import { fetchData } from './apiCalls';
 // import domUpdates from './domUpdates';
 const checkRatesBtn = document.querySelector('.check-rates-button');
 const reservationBtn = document.querySelector('.reservation-button');
@@ -24,7 +24,9 @@ const signInBtn = document.getElementById('sign-in-button');
 const loginErrorMsg = document.getElementById('login-error-msg');
 const beachImage = document.querySelector('.beach-image');
 const loginHolder = document.getElementById('login-holder');
+const totalSpent = document.querySelector('.total-spent');
 
+window.addEventListener('load', returnData);
 checkRatesBtn.addEventListener('click', renderCheckInPage);
 rewardsBtn.addEventListener('click', renderRewardsPage);
 reservationBtn.addEventListener('click', renderReservationsPage);
@@ -34,6 +36,7 @@ loginBtn.addEventListener('click', (e) => {
   const username = loginForm.username.value;
   const password = loginForm.password.value;
   // if (username === 'customer50' && password === 'overlook2021') {
+  // currentCustomer = new Customer(customerData);
   show(beachImage);
   hide(loginHolder);
   show(reservationBtn);
@@ -44,6 +47,34 @@ loginBtn.addEventListener('click', (e) => {
   // }
 });
 
+//Global variables
+let customerData, roomData, bookingData, user, customer, hotel;
+
+function getData() {
+  return Promise.all([
+    fetchData('customers'),
+    fetchData('rooms'),
+    fetchData('bookings'),
+  ]);
+}
+
+function returnData() {
+  getData().then((promiseArray) => {
+    customerData = promiseArray[0].customers;
+    roomData = promiseArray[1].rooms;
+    bookingData = promiseArray[2].bookings;
+    // user = promiseArray[3];
+    // console.log(customerData);
+    // console.log(roomData);
+    // console.log(bookingData);
+    console.log(promiseArray);
+    // customer = new Customer();
+    // hotel = new Hotel();
+    // displayCustomerInfo(customer);
+    // displayDestinationList();
+  });
+}
+
 function show(element) {
   element.classList.remove('hidden');
 }
@@ -53,6 +84,7 @@ function hide(element) {
 }
 
 function renderCheckInPage() {
+  hide(totalSpent);
   console.log('this is checkin page');
 }
 
@@ -64,11 +96,15 @@ function renderSignInForm() {
 console.log('This is the JavaScript entry file - your code begins here.');
 
 function renderReservationsPage() {
-  hide(beachImage);
+  hide(totalSpent);
   console.log('this is reservation page');
 }
 
-function renderRewardsPage() {
-  hide(beachImage);
+function renderRewardsPage(amount) {
+  totalSpent.innerHTML = `
+    <p>You have spent $${amount}this year.</p>
+    <p>You have ${amount} points to redeem for future stays</p>`;
+  show(beachImage);
+  show(totalSpent);
   console.log('this is rewards page');
 }
