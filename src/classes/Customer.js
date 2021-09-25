@@ -5,9 +5,9 @@ class Customer {
     this.customerBookings = [];
   }
 
-  filterRoomsByType() {}
-
-  selectRoom() {}
+  selectRoom() {
+    //use event.target.id??
+  }
 }
 // I should be able to select a date for which I’d like to book a room for myself
 // Upon selecting a date, I should be shown a list of room details for only rooms that are available on that date

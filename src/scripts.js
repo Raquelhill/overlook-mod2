@@ -13,7 +13,7 @@ import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
 
 // fetch calls & data variables
-import { fetchData } from './apiCalls';
+import { fetchData, postData } from './apiCalls';
 // import domUpdates from './domUpdates';
 const checkRatesBtn = document.querySelector('.check-rates-button');
 const reservationBtn = document.querySelector('.reservation-button');
@@ -36,7 +36,7 @@ loginBtn.addEventListener('click', (e) => {
   const username = loginForm.username.value;
   const password = loginForm.password.value;
   // if (username === 'customer50' && password === 'overlook2021') {
-  // currentCustomer = new Customer(customerData);
+  currentCustomer = new Customer(customerData);
   show(beachImage);
   hide(loginHolder);
   show(reservationBtn);
@@ -48,7 +48,7 @@ loginBtn.addEventListener('click', (e) => {
 });
 
 //Global variables
-let customerData, roomData, bookingData, user, customer, hotel;
+let customerData, roomData, bookingData, currentCustomer, customer, hotel;
 
 function getData() {
   return Promise.all([
@@ -70,9 +70,16 @@ function returnData() {
     console.log(promiseArray);
     // customer = new Customer();
     // hotel = new Hotel();
-    // displayCustomerInfo(customer);
+    instantiateData();
     // displayDestinationList();
   });
+}
+
+function instantiateData() {
+  let allCustomers = customerData.map((customer) => {
+    return new Customer(customerData);
+  });
+  hotel = new Hotel(roomData, bookingData, allCustomers);
 }
 
 function show(element) {
@@ -100,10 +107,11 @@ function renderReservationsPage() {
   console.log('this is reservation page');
 }
 
-function renderRewardsPage(amount) {
+function renderRewardsPage(hotel) {
   totalSpent.innerHTML = `
-    <p>You have spent $${amount}this year.</p>
-    <p>You have ${amount} points to redeem for future stays</p>`;
+    <p>You have spent ${hotel.calculateCustomerTripTotals} this year.</p>
+    <p>You have ${hotel.calculateCustomerTripTotals} points to redeem for future stays</p>`;
+  console.log(hotel.calculateCustomerTripTotals);
   show(beachImage);
   show(totalSpent);
   console.log('this is rewards page');

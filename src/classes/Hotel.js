@@ -5,32 +5,44 @@ class Hotel {
     this.customers = customers;
   }
 
-  returnCustomerId(userID) {
+  returnCustomerID(userID) {
     this.customers.find((customer) => {
       return customer.id === userID;
     });
   }
 
-  returnPastBookings() {
-    //if booking.date < currentDate then show bookings
-  }
+  findFutureBookings = (userID, date) => {
+    return this.customers[this.returnIndexOfCustomer(userID)].bookings.filter(
+      (booking) => {
+        return booking.date >= date;
+      }
+    );
+  };
 
-  returnFutureBookings() {
-    //if booking.date >= currentDate then show bookings
-  }
+  findPastBookings = (userID, date) => {
+    return this.customers[this.returnIndexOfCustomer(userID)].bookings.filter(
+      (booking) => {
+        return booking.date < date;
+      }
+    );
+  };
 
-  calculateTripTotals(userID) {
+  calculateCustomerTripTotals(userID) {
     const tripTotal = this.rooms.reduce((acc, room) => {
-      this.customers[this.returnCustomerId(userID)].bookings.forEach(
+      this.customers[this.returnCustomerID(userID)].bookings.forEach(
         (booking) => {
           if (room.number === booking.roomNumber) {
-            acc += currentRoom.costPerNight;
+            acc += room.costPerNight * 100;
           }
         }
       );
       return acc;
     }, 0);
-    return tripTotal;
+    return tripTotal / 100;
+  }
+
+  filterRoomsByRoomType(type) {
+    return this.roomsAvailable.filter((room) => room.roomType === type);
   }
 }
 
