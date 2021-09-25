@@ -27,7 +27,7 @@ class Hotel {
     );
   };
 
-  calculateCustomerTripTotals(userID) {
+  calculateCustomerBookingsTotals(userID) {
     const tripTotal = this.rooms.reduce((acc, room) => {
       this.customers[this.returnCustomerID(userID)].bookings.forEach(
         (booking) => {
