@@ -2,7 +2,7 @@ class Customer {
   constructor(customerData) {
     this.id = customerData.id;
     this.name = customerData.name;
-    this.customerBookings = [];
+    // this.bookings = [];
   }
 
   selectRoom() {
