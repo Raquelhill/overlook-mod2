@@ -6,7 +6,8 @@ import './css/base.scss';
 
 // An example of how you tell webpack to use an image (also need to link to it in the index.html)
 import './images/turks-beach.png';
-import './images/star-fish.png';
+import './images/transparent-starfish.png';
+import './images/resort-room.png';
 
 // import APIRequests from './apiCalls';
 import Customer from './classes/Customer';
@@ -24,10 +25,10 @@ const signInBtn = document.getElementById('sign-in-button');
 const loginErrorMsg = document.getElementById('login-error-msg');
 const beachImage = document.querySelector('.beach-image');
 const loginHolder = document.getElementById('login-holder');
-const totalSpent = document.querySelector('.total-spent');
+const customerInfoDisplay = document.querySelector('.customer-info-display');
 
 window.addEventListener('load', returnData);
-checkRatesBtn.addEventListener('click', renderCheckInPage);
+checkRatesBtn.addEventListener('click', renderBookingPage);
 rewardsBtn.addEventListener('click', renderRewardsPage);
 reservationBtn.addEventListener('click', renderReservationsPage);
 signInBtn.addEventListener('click', renderSignInForm);
@@ -35,16 +36,17 @@ loginBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const username = loginForm.username.value;
   const password = loginForm.password.value;
-  // if (username === 'customer50' && password === 'overlook2021') {
-  currentCustomer = new Customer(customerData);
-  show(beachImage);
-  hide(loginHolder);
-  show(reservationBtn);
-  show(rewardsBtn);
-  show(checkRatesBtn);
-  // } else {
-  //   loginErrorMsg.style.opacity = 1;
-  // }
+  let inputId = username.substring(8);
+  hotel.findCurrentCustomer(inputId);
+  if (hotel.currentCustomer && password === 'overlook2021') {
+    show(beachImage);
+    hide(loginHolder);
+    show(reservationBtn);
+    show(rewardsBtn);
+    show(checkRatesBtn);
+  } else {
+    loginErrorMsg.style.opacity = 1;
+  }
 });
 
 //Global variables
@@ -63,23 +65,15 @@ function returnData() {
     customerData = promiseArray[0].customers;
     roomData = promiseArray[1].rooms;
     bookingData = promiseArray[2].bookings;
-    // user = promiseArray[3];
-    // console.log(customerData);
-    // console.log(roomData);
-    // console.log(bookingData);
-    console.log(promiseArray);
-    // customer = new Customer();
-    // hotel = new Hotel();
     instantiateData();
-    // displayDestinationList();
   });
 }
 
 function instantiateData() {
-  let allCustomers = customerData.map((customer) => {
-    return new Customer(customerData);
+  let customers = customerData.map((customer) => {
+    return new Customer(customer);
   });
-  hotel = new Hotel(roomData, bookingData, allCustomers);
+  hotel = new Hotel(roomData, bookingData, customers);
 }
 
 function show(element) {
@@ -90,9 +84,12 @@ function hide(element) {
   element.classList.add('hidden');
 }
 
-function renderCheckInPage() {
-  hide(totalSpent);
-  console.log('this is checkin page');
+function renderBookingPage() {
+  show(customerInfoDisplay);
+  console.log('this is booking page');
+  customerInfoDisplay.innerHTML = '';
+  customerInfoDisplay.innerHTML += `
+  <p>book hotel page</p>`;
 }
 
 function renderSignInForm() {
@@ -100,19 +97,42 @@ function renderSignInForm() {
   hide(beachImage);
   show(loginHolder);
 }
-console.log('This is the JavaScript entry file - your code begins here.');
 
 function renderReservationsPage() {
-  hide(totalSpent);
+  hotel.returnCustomerBookings();
+  show(customerInfoDisplay);
+  customerInfoDisplay.innerHTML = '';
+  hotel.currentCustomerBooking.forEach((booking) => {
+    let reservedRoom = hotel.rooms.find((room) => {
+      return room.number === booking.roomNumber;
+    });
+    customerInfoDisplay.innerHTML += `
+        <section class="hotel-room-card">
+        <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room"
+          <article class="resort-room-info"
+            <p>OCEANVIEW ${reservedRoom.roomType.toUpperCase()}</p>
+            <p>BED OPTIONS</p> 
+            <p>${reservedRoom.numBeds}</p> 
+            <p>${reservedRoom.bedSize}</p>
+            <p>AMENITIES</p> 
+            <p>Generously stocked refrigerated private bar</p>
+            <p>Bidet: ${reservedRoom.bidet}</p>
+            <p>Twice-daily housekeeping service and evening ice delivery</p>
+            <p>ROOM # ${booking.roomNumber}</p>
+            <p>RESERVED</p> 
+            <p>${booking.date}</p>
+            <p>from $${reservedRoom.costPerNight.toFixed(2)}</p>
+            <p>average per night <p>
+          </article>
+        </section>`;
+  });
+  show(customerInfoDisplay);
   console.log('this is reservation page');
 }
 
-function renderRewardsPage(hotel) {
-  totalSpent.innerHTML = `
-    <p>You have spent ${hotel.calculateCustomerTripTotals} this year.</p>
-    <p>You have ${hotel.calculateCustomerTripTotals} points to redeem for future stays</p>`;
-  console.log(hotel.calculateCustomerTripTotals);
-  show(beachImage);
-  show(totalSpent);
-  console.log('this is rewards page');
+function renderRewardsPage() {
+  customerInfoDisplay.innerHTML = `
+    <p>You have spent $${hotel.calculateCustomerBookingsTotals()} this year.</p>
+    <p>You have ${hotel.calculateCustomerBookingsTotals()} points to redeem for future stays</p>`;
+  show(customerInfoDisplay);
 }
