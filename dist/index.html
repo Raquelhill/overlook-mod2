@@ -20,15 +20,33 @@
       <menu class ="menu-buttons">
         <button class="reservation-button hidden" id="reservation-button">Reservations</button>
         <button class="yearly-expense-button hidden" id="yearly-expense-button">Rewards Status</button>
-        <button class="check-rates-button hidden" id="check-rates-button hidden">CHECK RATES</button>
+        <div class="dropdown">
+          <button class="check-rates-button hidden" aria-label="Right Dropdown Menu">CHECK RATES</button>
+          <section class="dropdown-content">
+            <h3>SELECT DATES</h3>
+            <label class="arrival-date" for="start">ARRIVAL</label>
+            <input type="date" id="start" name="trip-start" min="Date.now()" max="2022-12-31">
+            <label class ="departure-date" for="start">DEPARTURE</label>
+            <input type="date" id="start" name="trip-start" min="Date.now()" max="2022-12-31">
+            <section class="filter-by-room-type">
+              <label for="room-type">ROOM TYPE</label>
+              <select class="choose-by-type button" aria-label="room-type-dropdown" label="filter-by-room-type" id="room-type">
+                <option value="single room">STUDIO</option>
+                <option value="junior suite">JUNIOR SUITE</option>
+                <option value="suite">1 BEDROOM SUITE</option>
+                <option value="residential suite">RESIDENTIAL SUITE</option>
+              </select>
+            </section> 
+            <button class="check-availability-button" id="check-availability-button" type="submit">CHECK AVAILABILITY</button>
+            //if iut doesn't work change button to input 
       </menu>
     </nav>
-    <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="600em">
+    <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="500em">
   </header>
     <main class ="login-holder hidden" id="login-holder">
-      <h1 id="login-header">Welcome back.</h1>
+      <h1 id="login-header">Welcome back</h1>
       <div id="login-error-msg-holder">
-        <p id="login-error-msg">Your username and/or password was not found in our records. <span id="error-msg-second-line">Please try signing in again. </span></p>
+        <p id="login-error-msg">Your username and/or password was not found in our records <span id="error-msg-second-line">Please try signing in again </span></p>
       </div>
       <form id="login-form">
         <input type="text" name="username" id="username-field" class="login-form-field" placeholder="Username">

@@ -7,6 +7,7 @@ class Hotel {
     this.customers = customersData;
     this.currentCustomer = null;
     this.currentCustomerBooking = null;
+    this.availableRooms = [];
   }
 
   findCurrentCustomer(inputId) {
@@ -19,6 +20,7 @@ class Hotel {
     this.currentCustomerBooking = this.bookings.filter((booking) => {
       return booking.userID === this.currentCustomer.id;
     });
+    console.log(this.currentCustomerBooking);
   }
 
   calculateCustomerBookingsTotals() {
@@ -32,6 +34,35 @@ class Hotel {
       return acc;
     }, 0);
     return bookingTotal.toFixed(2);
+  }
+
+  returnAvailableRoomsByDate(arrivalDate, departureDate) {
+    let unavailableRooms = this.bookings.bookings
+      .filter((booking) => {
+        if (booking.date >= arrivalDate && booking.date <= departureDate) {
+          return booking;
+        }
+      })
+      .map((room) => {
+        return room.roomNumber;
+      });
+    let availableRooms = this.rooms.rooms.filter((room) => {
+      if (!unavailableRooms.includes(room.number)) {
+        return room;
+      }
+    });
+    return availableRooms;
+  }
+
+  filterRoomsByType(roomType, arrivalDate, departureDate) {
+    let availableRooms = this.returnAvailableRoomsByDate(
+      arrivalDate,
+      departureDate
+    );
+    let filteredRooms = availableRooms.filter((room) => {
+      return roomType === room.roomType;
+    });
+    return filteredRooms;
   }
 }
 

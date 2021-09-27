@@ -16,6 +16,9 @@ import Hotel from './classes/Hotel';
 // fetch calls & data variables
 import { fetchData, postData } from './apiCalls';
 // import domUpdates from './domUpdates';
+const checkAvailabilityBtn = document.querySelector(
+  '.check-availability-button'
+);
 const checkRatesBtn = document.querySelector('.check-rates-button');
 const reservationBtn = document.querySelector('.reservation-button');
 const rewardsBtn = document.querySelector('.yearly-expense-button');
@@ -26,8 +29,15 @@ const loginErrorMsg = document.getElementById('login-error-msg');
 const beachImage = document.querySelector('.beach-image');
 const loginHolder = document.getElementById('login-holder');
 const customerInfoDisplay = document.querySelector('.customer-info-display');
+const checkRatesDropDownDisplay = document.querySelector('.dropdown-content');
+const arrivalDate = document.querySelector('.arrival-date');
+const departureDate = document.querySelector('.departure-date');
+//create variables for checkin and checkout
+//add query slectore for each calendar checkInDate.value and set it to a varaibles in your check date function
+//use a split and a join to make the values look like API
 
 window.addEventListener('load', returnData);
+checkAvailabilityBtn.addEventListener('click', renderAvailableBookings);
 checkRatesBtn.addEventListener('click', renderBookingPage);
 rewardsBtn.addEventListener('click', renderRewardsPage);
 reservationBtn.addEventListener('click', renderReservationsPage);
@@ -76,6 +86,13 @@ function instantiateData() {
   hotel = new Hotel(roomData, bookingData, customers);
 }
 
+function getDate() {
+  let arrival = arrivalDate.value;
+  console.log(arrivalDate.value);
+  let departure = departureDate.value;
+  console.log(departureDate.value);
+}
+
 function show(element) {
   element.classList.remove('hidden');
 }
@@ -86,6 +103,7 @@ function hide(element) {
 
 function renderBookingPage() {
   show(customerInfoDisplay);
+  checkRatesDropDownDisplay.classList.toggle('show');
   console.log('this is booking page');
   customerInfoDisplay.innerHTML = '';
   customerInfoDisplay.innerHTML += `
@@ -99,13 +117,15 @@ function renderSignInForm() {
 }
 
 function renderReservationsPage() {
-  hotel.returnCustomerBookings();
+  checkRatesDropDownDisplay.classList.remove('show');
   show(customerInfoDisplay);
   customerInfoDisplay.innerHTML = '';
+  hotel.returnCustomerBookings();
   hotel.currentCustomerBooking.forEach((booking) => {
     let reservedRoom = hotel.rooms.find((room) => {
       return room.number === booking.roomNumber;
     });
+
     customerInfoDisplay.innerHTML += `
         <section class="hotel-room-card">
         <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room"
@@ -126,13 +146,38 @@ function renderReservationsPage() {
           </article>
         </section>`;
   });
-  show(customerInfoDisplay);
   console.log('this is reservation page');
 }
 
 function renderRewardsPage() {
+  checkRatesDropDownDisplay.classList.remove('show');
   customerInfoDisplay.innerHTML = `
     <p>You have spent $${hotel.calculateCustomerBookingsTotals()} this year.</p>
     <p>You have ${hotel.calculateCustomerBookingsTotals()} points to redeem for future stays</p>`;
   show(customerInfoDisplay);
+}
+
+function renderAvailableBookings() {
+  getDate(arrivalDate, departureDate);
+  hotel.returnAvailableRoomsByDate(arrivalDate, departureDate);
+  checkRatesDropDownDisplay.classList.remove('show');
+  customerInfoDisplay.innerHTML = '';
+  roomData.forEach((room) => {
+    customerInfoDisplay.innerHTML += `
+        <section class="hotel-room-card">
+        <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room"
+          <article class="resort-room-info"
+            <p>OCEANVIEW ${room.roomType.toUpperCase()}</p>
+            <p>BED OPTIONS</p>
+            <p>${room.numBeds}</p>
+            <p>${room.bedSize}</p>
+            <p>AMENITIES</p>
+            <p>Generously stocked refrigerated private bar</p>
+            <p>Bidet: ${room.bidet}</p>
+            <p>Twice-daily housekeeping service and evening ice delivery</p>
+            <p>ROOM # ${room.roomNumber}</p>
+          </article>
+        </section>`;
+  });
+  console.log('this is render available bookings');
 }
