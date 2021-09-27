@@ -37,7 +37,7 @@ class Hotel {
   }
 
   returnAvailableRoomsByDate(arrivalDate, departureDate) {
-    let unavailableRooms = this.bookings.bookings
+    let unavailableRooms = this.bookings
       .filter((booking) => {
         if (booking.date >= arrivalDate && booking.date <= departureDate) {
           return booking;
@@ -46,11 +46,12 @@ class Hotel {
       .map((room) => {
         return room.roomNumber;
       });
-    let availableRooms = this.rooms.rooms.filter((room) => {
+    let availableRooms = this.rooms.filter((room) => {
       if (!unavailableRooms.includes(room.number)) {
         return room;
       }
     });
+    console.log(availableRooms);
     return availableRooms;
   }
 
@@ -59,9 +60,11 @@ class Hotel {
       arrivalDate,
       departureDate
     );
+    console.log(availableRooms);
     let filteredRooms = availableRooms.filter((room) => {
       return roomType === room.roomType;
     });
+    console.log(filteredRooms);
     return filteredRooms;
   }
 }

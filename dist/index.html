@@ -22,12 +22,12 @@
         <button class="yearly-expense-button hidden" id="yearly-expense-button">Rewards Status</button>
         <div class="dropdown">
           <button class="check-rates-button hidden" aria-label="Right Dropdown Menu">CHECK RATES</button>
-          <section class="dropdown-content">
+          <form class="dropdown-content">
             <h3>SELECT DATES</h3>
-            <label class="arrival-date" for="start">ARRIVAL</label>
-            <input type="date" id="start" name="trip-start" min="Date.now()" max="2022-12-31">
-            <label class ="departure-date" for="start">DEPARTURE</label>
-            <input type="date" id="start" name="trip-start" min="Date.now()" max="2022-12-31">
+            <label class="arrival-date" for="trip-start">ARRIVAL</label>
+            <input type="date" id="arrival" name="trip-start" min="Date.now()" max="2022-12-31">
+            <label class ="departure-date" for="trip-end">DEPARTURE</label>
+            <input type="date" id="departure" name="trip-end" min="Date.now()" max="2022-12-31">
             <section class="filter-by-room-type">
               <label for="room-type">ROOM TYPE</label>
               <select class="choose-by-type button" aria-label="room-type-dropdown" label="filter-by-room-type" id="room-type">
@@ -36,9 +36,8 @@
                 <option value="suite">1 BEDROOM SUITE</option>
                 <option value="residential suite">RESIDENTIAL SUITE</option>
               </select>
-            </section> 
-            <button class="check-availability-button" id="check-availability-button" type="submit">CHECK AVAILABILITY</button>
-            //if iut doesn't work change button to input 
+              <button class="check-availability-button" id="check-availability-button" type="submit">CHECK AVAILABILITY</>
+          </form> 
       </menu>
     </nav>
     <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="500em">

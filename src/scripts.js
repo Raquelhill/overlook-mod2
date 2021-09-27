@@ -12,6 +12,7 @@ import './images/resort-room.png';
 // import APIRequests from './apiCalls';
 import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
+let dayjs = require('dayjs');
 
 // fetch calls & data variables
 import { fetchData, postData } from './apiCalls';
@@ -30,14 +31,15 @@ const beachImage = document.querySelector('.beach-image');
 const loginHolder = document.getElementById('login-holder');
 const customerInfoDisplay = document.querySelector('.customer-info-display');
 const checkRatesDropDownDisplay = document.querySelector('.dropdown-content');
-const arrivalDate = document.querySelector('.arrival-date');
-const departureDate = document.querySelector('.departure-date');
+const arrivalDate = document.getElementById('arrival');
+const departureDate = document.getElementById('departure');
+const roomType = document.getElementById('room-type');
 //create variables for checkin and checkout
 //add query slectore for each calendar checkInDate.value and set it to a varaibles in your check date function
 //use a split and a join to make the values look like API
 
 window.addEventListener('load', returnData);
-checkAvailabilityBtn.addEventListener('click', renderAvailableBookings);
+checkAvailabilityBtn.addEventListener('click', checkAvailability);
 checkRatesBtn.addEventListener('click', renderBookingPage);
 rewardsBtn.addEventListener('click', renderRewardsPage);
 reservationBtn.addEventListener('click', renderReservationsPage);
@@ -86,13 +88,6 @@ function instantiateData() {
   hotel = new Hotel(roomData, bookingData, customers);
 }
 
-function getDate() {
-  let arrival = arrivalDate.value;
-  console.log(arrivalDate.value);
-  let departure = departureDate.value;
-  console.log(departureDate.value);
-}
-
 function show(element) {
   element.classList.remove('hidden');
 }
@@ -127,17 +122,18 @@ function renderReservationsPage() {
     });
 
     customerInfoDisplay.innerHTML += `
-        <section class="hotel-room-card">
-        <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room"
-          <article class="resort-room-info"
-            <p>OCEANVIEW ${reservedRoom.roomType.toUpperCase()}</p>
+        <section class="hotel-room-cards">
+        <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room">
+          <article class="resort-room-info">
+            <p class="room-title">OCEANVIEW ${reservedRoom.roomType.toUpperCase()}</p>
             <p>BED OPTIONS</p> 
-            <p>${reservedRoom.numBeds}</p> 
-            <p>${reservedRoom.bedSize}</p>
+            <p>${reservedRoom.numBeds} ${reservedRoom.bedSize}</p>
             <p>AMENITIES</p> 
-            <p>Generously stocked refrigerated private bar</p>
-            <p>Bidet: ${reservedRoom.bidet}</p>
-            <p>Twice-daily housekeeping service and evening ice delivery</p>
+            <ul>
+              <li>Generously stocked refrigerated private bar</li>
+              <li>Bidet: ${reservedRoom.bidet}</li>
+              <li>Twice-daily housekeeping service and evening ice delivery</li>
+            </ul> 
             <p>ROOM # ${booking.roomNumber}</p>
             <p>RESERVED</p> 
             <p>${booking.date}</p>
@@ -157,25 +153,45 @@ function renderRewardsPage() {
   show(customerInfoDisplay);
 }
 
+function checkAvailability() {
+  event.preventDefault();
+  let arrivalDateInput = arrivalDate.value.split('-').join('/');
+  let departureDateInput = departureDate.value.split('-').join('/');
+  let selectedRoomType = roomType.value;
+  roomData = hotel.returnAvailableRoomsByDate(
+    arrivalDateInput,
+    departureDateInput
+  );
+  roomData = hotel.filterRoomsByType(
+    selectedRoomType,
+    arrivalDateInput,
+    departureDateInput
+  );
+  renderAvailableBookings();
+}
+
 function renderAvailableBookings() {
-  getDate(arrivalDate, departureDate);
-  hotel.returnAvailableRoomsByDate(arrivalDate, departureDate);
   checkRatesDropDownDisplay.classList.remove('show');
   customerInfoDisplay.innerHTML = '';
   roomData.forEach((room) => {
     customerInfoDisplay.innerHTML += `
-        <section class="hotel-room-card">
-        <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room"
-          <article class="resort-room-info"
-            <p>OCEANVIEW ${room.roomType.toUpperCase()}</p>
+        <section class="hotel-room-cards">
+        <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room">
+          <article class="resort-room-info">
+            <p class="room-title"> OCEANVIEW ${room.roomType.toUpperCase()}</p>
             <p>BED OPTIONS</p>
-            <p>${room.numBeds}</p>
-            <p>${room.bedSize}</p>
-            <p>AMENITIES</p>
-            <p>Generously stocked refrigerated private bar</p>
-            <p>Bidet: ${room.bidet}</p>
-            <p>Twice-daily housekeeping service and evening ice delivery</p>
-            <p>ROOM # ${room.roomNumber}</p>
+            <p>${room.numBeds} ${room.bedSize}</p>
+            <p>AMENITIES</p> 
+            <ul>
+              <li>Generously stocked refrigerated private bar</li>
+              <li>Bidet: ${room.bidet}</li>
+              <li>Twice-daily housekeeping service and evening ice delivery</li>
+            </ul> 
+            <p>ROOM # ${room.number}</p>
+            <div>
+              <p>from $${room.costPerNight.toFixed(2)}</p>
+              <p>average per night <p>
+            </div>
           </article>
         </section>`;
   });

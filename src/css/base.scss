@@ -160,14 +160,18 @@ body {
   display: flex;
 }
 
-.hotel-room-card {
+.hotel-room-cards {
+  display: flex;
   border-color: #d8d8d8;
   background-color: #ededed;
   color: black;
+  flex-direction: row;
+  align-items: center;
 }
 
 .customerInfoDisplay {
   display: flex;
+  margin-top: 2%;
 }
 
 .dropdown {
@@ -243,4 +247,8 @@ body {
   font-size: 1.1rem;
   color: #e8e8ed;
   font-family: 'Montserrat', sans-serif;
+}
+.room-title {
+  font-size: 1.5em;
+  font-weight: bold;
 }
