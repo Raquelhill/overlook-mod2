@@ -15,7 +15,7 @@ import Hotel from './classes/Hotel';
 let dayjs = require('dayjs');
 
 // fetch calls & data variables
-import { fetchData, updateBookings } from './apiCalls';
+import { addBooking, fetchData, updateBookings } from './apiCalls';
 // import domUpdates from './domUpdates';
 const checkAvailabilityBtn = document.querySelector(
   '.check-availability-button'
@@ -43,7 +43,7 @@ const availableRoomsCards = document.querySelector('#availableRoomsCards');
 window.addEventListener('load', returnData);
 customerInfoDisplay.addEventListener('click', function (event) {
   if (event.target.className === 'book-now-button') {
-    modifyBookingAPI();
+    bookRoom(event);
   }
 });
 // bookNowButton.addEventListener('click', hello);
@@ -59,6 +59,7 @@ loginBtn.addEventListener('click', (e) => {
   let inputId = username.substring(8);
   hotel.findCurrentCustomer(inputId);
   if (hotel.currentCustomer && password === 'overlook2021') {
+    currentCustomer = hotel.currentCustomer;
     show(beachImage);
     hide(loginHolder);
     show(reservationBtn);
@@ -70,9 +71,10 @@ loginBtn.addEventListener('click', (e) => {
 });
 
 //Global variables
-let customerData, roomData, bookingData, currentCustomer, bookingDate, hotel;
+let customerData, roomData, currentCustomer, bookingDate, hotel;
+export let bookingData = null;
 
-function getData() {
+export function getData() {
   return Promise.all([
     fetchData('customers'),
     fetchData('rooms'),
@@ -80,11 +82,12 @@ function getData() {
   ]);
 }
 
-function returnData() {
+export function returnData() {
   getData().then((promiseArray) => {
     customerData = promiseArray[0].customers;
     roomData = promiseArray[1].rooms;
     bookingData = promiseArray[2].bookings;
+    // customerId = promiseArray[3];
     instantiateData();
   });
 }
@@ -93,6 +96,8 @@ function instantiateData() {
   let customers = customerData.map((customer) => {
     return new Customer(customer);
   });
+
+  console.log(customers);
   hotel = new Hotel(roomData, bookingData, customers);
 }
 
@@ -178,7 +183,7 @@ function renderAvailableBookings() {
   customerInfoDisplay.innerHTML = '';
   roomData.forEach((room) => {
     customerInfoDisplay.innerHTML += `
-        <section class="hotel-room-cards">
+        <section class="hotel-room-cards" id="${room.number}">
         <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room">
           <article class="resort-room-info">
             <p class="room-title"> OCEANVIEW ${room.roomType.toUpperCase()}</p>
@@ -198,11 +203,12 @@ function renderAvailableBookings() {
   });
 }
 
-function modifyBookingAPI(availableRooms) {
-  Promise.all(
-    availableRooms.map((room) => {
-      updateBookings(userID, date, roomNumber);
-      console.log(room);
-    })
-  );
+function bookRoom(event) {
+  event.preventDefault();
+  hide(customerInfoDisplay);
+  let bookingDate = arrivalDate.value.split('-').join('/');
+  let bookingRoomNumber = Number(event.target.closest('section').id);
+  addBooking(bookingRoomNumber, currentCustomer.id, bookingDate)
+    .then(hotel.returnCustomerBookings())
+    .then(hotel.calculateCustomerBookingsTotals());
 }

@@ -1,22 +1,26 @@
+import { getData } from './scripts.js';
+import { bookingData } from './scripts.js';
+
 function fetchData(file) {
   return fetch(`http://localhost:3001/api/v1/${file}`).then((response) =>
     response.json()
   );
 }
 
-function updateBookings(userID, date, roomNumber) {
-  return fetch('http://localhost:3001/api/v1/users', {
+function addBooking(room, customer, date) {
+  return fetch('http://localhost:3001/api/v1/bookings', {
     method: 'POST',
     body: JSON.stringify({
-      userID,
-      date,
-      roomNumber,
+      userID: customer,
+      date: date,
+      roomNumber: room,
     }),
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => checkResponse(response))
+    .then((response) => response.json())
+    .then((response) => bookingData.push(response.newBooking))
     .catch((error) => console.warn(error));
 }
 
@@ -29,4 +33,4 @@ function checkResponse(response) {
   return response.json();
 }
 
-export { fetchData, updateBookings };
+export { fetchData, addBooking };
