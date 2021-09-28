@@ -99,10 +99,7 @@ function hide(element) {
 function renderBookingPage() {
   show(customerInfoDisplay);
   checkRatesDropDownDisplay.classList.toggle('show');
-  console.log('this is booking page');
   customerInfoDisplay.innerHTML = '';
-  customerInfoDisplay.innerHTML += `
-  <p>book hotel page</p>`;
 }
 
 function renderSignInForm() {
