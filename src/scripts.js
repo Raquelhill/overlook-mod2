@@ -137,8 +137,10 @@ function renderReservationsPage() {
             <p>ROOM # ${booking.roomNumber}</p>
             <p>RESERVED</p> 
             <p>${booking.date}</p>
-            <p>from $${reservedRoom.costPerNight.toFixed(2)}</p>
-            <p>average per night <p>
+            <div class="room-cost">
+              <p>from $${reservedRoom.costPerNight.toFixed(2)}</p>
+              <p>average per night <p>
+            </div>
           </article>
         </section>`;
   });
@@ -188,7 +190,7 @@ function renderAvailableBookings() {
               <li>Twice-daily housekeeping service and evening ice delivery</li>
             </ul> 
             <p>ROOM # ${room.number}</p>
-            <div>
+            <div class="room-cost">
               <p>from $${room.costPerNight.toFixed(2)}</p>
               <p>average per night <p>
             </div>

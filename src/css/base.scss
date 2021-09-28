@@ -162,11 +162,12 @@ body {
 
 .hotel-room-cards {
   display: flex;
-  border-color: #d8d8d8;
   background-color: #ededed;
   color: black;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 2%;
+  margin-top: 2%;
 }
 
 .customerInfoDisplay {
@@ -251,4 +252,10 @@ body {
 .room-title {
   font-size: 1.5em;
   font-weight: bold;
+}
+
+.room-cost {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
