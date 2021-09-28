@@ -14,6 +14,7 @@ class Hotel {
     this.currentCustomer = this.customers.find((customer) => {
       return customer.id === parseInt(inputId);
     });
+    console.log(this.currentCustomer);
   }
 
   returnCustomerBookings() {

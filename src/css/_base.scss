@@ -1,0 +1,235 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  background-color: $secondary-text;
+}
+
+// HEADER CONTAINER
+header {
+  @include flex-column;
+  width: 100%;
+  color: $primary-text;
+}
+
+// TITLE CONTAINER
+.title-container {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 2%;
+
+  .title {
+    padding-left: 2%;
+    margin-bottom: 2%;
+    font-size: 2.4em;
+  }
+}
+
+.star-fish {
+  padding-left: 2%;
+  margin-top: 2%;
+}
+
+.sign-in-button {
+  margin-left: 65%;
+  margin-bottom: 4%;
+  background-color: $secondary-text;
+  border: none;
+  font-size: 1.4em;
+  color: $primary-text;
+}
+
+.sign-in-button:hover {
+  color: #209fdf;
+}
+
+// MENU BTNS CONTAINER
+.menu-buttons {
+  display: flex;
+  justify-content: flex-end;
+  // margin-bottom: 0%;
+  // margin-top: 0%;
+  margin: 0;
+}
+
+.reservation-button,
+.yearly-expense-button {
+  color: $primary-text;
+  border: none;
+  background-color: $secondary-text;
+  font-size: 1.1rem;
+
+  // .reservation-button:hover,
+  // .yearly-expense-button:hover
+  &:hover {
+    color: #209fdf;
+  }
+}
+
+// .yearly-expense-button {
+//   color: $primary-text;
+//   border: none;
+//   background-color: $secondary-text;
+//   font-size: 1.1rem;
+// }
+
+// .yearly-expense-button:hover {
+//   color: #209fdf;
+// }
+
+// DROP DOWN CONTAINER
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.check-rates-button {
+  padding: 1rem;
+  border: none;
+  background-color: $primary-text;
+  font-size: 1.1rem;
+  color: #e8e8ed;
+  font-family: $primary-font;
+
+  // .check-rates-button:hover
+  &:hover {
+    background-color: #209fdf;
+    color: $secondary-text;
+  }
+}
+
+.dropbtn {
+  width: 100%;
+  height: 100%;
+  padding: 1.32rem;
+  border: none;
+  background-color: whitesmoke;
+  font-size: 1rem;
+  color: black;
+  font-family: $primary-font;
+}
+
+// DROP DOWN FORM
+.dropdown-content {
+  @include flex-column;
+  z-index: 1;
+  right: 0;
+  left: auto;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background-color: #003e93;
+  color: $secondary-text;
+  min-width: 160px;
+  width: 600%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+  font-size: 1.9em;
+  margin-bottom: 1.5%;
+}
+
+#arrival {
+  margin-bottom: 1%;
+  font-size: large;
+}
+
+#departure {
+  margin-bottom: 1%;
+  font-size: large;
+}
+
+.filter-by-room-type {
+  @include flex-column;
+  align-items: center;
+}
+
+.choose-by-type {
+  font-size: large;
+  width: 78%;
+  height: 1.45em;
+}
+
+.check-availability-button {
+  // margin-top: 15%;
+  // margin-bottom: 15%;
+  margin: 15% auto;
+  padding: 1rem;
+  border: none;
+  background-color: $secondary-text;
+  font-size: 1.1rem;
+  color: #003e93;
+  font-family: $primary-font;
+}
+
+// .hotel-card-container {
+//   display: flex;
+// }
+
+// DISPLAY CONTAINER
+.customerInfoDisplay {
+  display: flex;
+  margin-top: 2%;
+}
+
+// HOTEL ROOM CARDS
+.hotel-room-cards {
+  color: black;
+  background-color: #ededed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // margin-bottom: 2%;
+  // margin-top: 2%;
+  margin: 2% auto;
+
+  .resort-room-info {
+    padding-left: 2%;
+  }
+}
+
+// .dropdown-content a {
+//   display: block;
+//   width: 100%;
+//   padding: 3rem 0;
+//   background-color: #f9f9f9;
+//   text-decoration: none;
+//   text-align: center;
+//   font-family: $primary-font;
+//   color: black;
+// }
+
+// CUSTOMER INFO SECTION in DOM
+.room-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.book-now-button {
+  // margin-top: 34%;
+  // margin-right: 1%;
+  margin: 34% 1% 0 0;
+  width: 15%;
+  padding: 1rem;
+  border: none;
+  background-color: #003e93;
+  font-size: 1.1rem;
+  color: $secondary-text;
+  font-family: $primary-font;
+}
+
+.show {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}

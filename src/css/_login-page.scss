@@ -1,0 +1,64 @@
+// LOGIN PAGE
+.login-holder {
+  margin-top: 8%;
+  width: 50%;
+  height: 80%;
+  background-color: #ededed;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+#login-error-msg-holder {
+  width: 100%;
+  height: 100%;
+  @include grid-center;
+}
+
+#login-error-msg {
+  font-size: large;
+  text-align: center;
+  margin: 0;
+  padding: 5px;
+  color: #8a0000;
+  opacity: 0;
+}
+
+#error-msg-second-line {
+  display: block;
+}
+
+#login-form {
+  align-self: flex-start;
+  @include grid-center;
+}
+
+.login-form-field {
+  font-size: large;
+  border: none;
+  margin-bottom: 10px;
+  outline: none;
+  padding: 6px 6px 7px 7px;
+}
+
+.login-form-field::placeholder {
+  color: #3a3a3a;
+}
+
+#login-form-submit {
+  width: 100%;
+  padding: 7px;
+  border: none;
+  color: $secondary-text;
+  font-weight: bold;
+  font-size: large;
+  background-color: $primary-text;
+  cursor: pointer;
+  outline: none;
+  margin-top: 8%;
+}
+
+.hidden {
+  display: none;
+}
