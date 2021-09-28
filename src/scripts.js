@@ -15,7 +15,7 @@ import Hotel from './classes/Hotel';
 let dayjs = require('dayjs');
 
 // fetch calls & data variables
-import { addBooking, fetchData, updateBookings } from './apiCalls';
+import { fetchData, postData } from './apiCalls';
 // import domUpdates from './domUpdates';
 const checkAvailabilityBtn = document.querySelector(
   '.check-availability-button'
@@ -26,7 +26,6 @@ const rewardsBtn = document.querySelector('.yearly-expense-button');
 const loginForm = document.getElementById('login-form');
 const loginBtn = document.getElementById('login-form-submit');
 const signInBtn = document.getElementById('sign-in-button');
-// const bookNowButton = document.getElementById('book-now-button');
 const loginErrorMsg = document.getElementById('login-error-msg');
 const beachImage = document.querySelector('.beach-image');
 const loginHolder = document.getElementById('login-holder');
@@ -35,18 +34,11 @@ const checkRatesDropDownDisplay = document.querySelector('.dropdown-content');
 const arrivalDate = document.getElementById('arrival');
 const departureDate = document.getElementById('departure');
 const roomType = document.getElementById('room-type');
-const availableRoomsCards = document.querySelector('#availableRoomsCards');
 //create variables for checkin and checkout
 //add query slectore for each calendar checkInDate.value and set it to a varaibles in your check date function
 //use a split and a join to make the values look like API
 
 window.addEventListener('load', returnData);
-customerInfoDisplay.addEventListener('click', function (event) {
-  if (event.target.className === 'book-now-button') {
-    bookRoom(event);
-  }
-});
-// bookNowButton.addEventListener('click', hello);
 checkAvailabilityBtn.addEventListener('click', checkAvailability);
 checkRatesBtn.addEventListener('click', renderBookingPage);
 rewardsBtn.addEventListener('click', renderRewardsPage);
@@ -59,7 +51,6 @@ loginBtn.addEventListener('click', (e) => {
   let inputId = username.substring(8);
   hotel.findCurrentCustomer(inputId);
   if (hotel.currentCustomer && password === 'overlook2021') {
-    currentCustomer = hotel.currentCustomer;
     show(beachImage);
     hide(loginHolder);
     show(reservationBtn);
@@ -71,10 +62,9 @@ loginBtn.addEventListener('click', (e) => {
 });
 
 //Global variables
-let customerData, roomData, currentCustomer, bookingDate, hotel;
-export let bookingData = null;
+let customerData, roomData, bookingData, currentCustomer, customer, hotel;
 
-export function getData() {
+function getData() {
   return Promise.all([
     fetchData('customers'),
     fetchData('rooms'),
@@ -82,12 +72,11 @@ export function getData() {
   ]);
 }
 
-export function returnData() {
+function returnData() {
   getData().then((promiseArray) => {
     customerData = promiseArray[0].customers;
     roomData = promiseArray[1].rooms;
     bookingData = promiseArray[2].bookings;
-    // customerId = promiseArray[3];
     instantiateData();
   });
 }
@@ -96,8 +85,6 @@ function instantiateData() {
   let customers = customerData.map((customer) => {
     return new Customer(customer);
   });
-
-  console.log(customers);
   hotel = new Hotel(roomData, bookingData, customers);
 }
 
@@ -111,8 +98,11 @@ function hide(element) {
 
 function renderBookingPage() {
   show(customerInfoDisplay);
-  show(checkRatesBtn);
-  checkRatesDropDownDisplay.classList.add('show');
+  checkRatesDropDownDisplay.classList.toggle('show');
+  console.log('this is booking page');
+  customerInfoDisplay.innerHTML = '';
+  customerInfoDisplay.innerHTML += `
+  <p>book hotel page</p>`;
 }
 
 function renderSignInForm() {
@@ -147,10 +137,14 @@ function renderReservationsPage() {
             <p>ROOM # ${booking.roomNumber}</p>
             <p>RESERVED</p> 
             <p>${booking.date}</p>
-            <p>from $${reservedRoom.costPerNight.toFixed(2)} per night</p>
+            <div class="room-cost">
+              <p>from $${reservedRoom.costPerNight.toFixed(2)}</p>
+              <p>average per night <p>
+            </div>
           </article>
         </section>`;
   });
+  console.log('this is reservation page');
 }
 
 function renderRewardsPage() {
@@ -183,7 +177,7 @@ function renderAvailableBookings() {
   customerInfoDisplay.innerHTML = '';
   roomData.forEach((room) => {
     customerInfoDisplay.innerHTML += `
-        <section class="hotel-room-cards" id="${room.number}">
+        <section class="hotel-room-cards">
         <img class="hotel-room-image" src="./images/resort-room.png" alt"beach-front-hotel-room">
           <article class="resort-room-info">
             <p class="room-title"> OCEANVIEW ${room.roomType.toUpperCase()}</p>
@@ -196,19 +190,12 @@ function renderAvailableBookings() {
               <li>Twice-daily housekeeping service and evening ice delivery</li>
             </ul> 
             <p>ROOM # ${room.number}</p>
-            <p>$${room.costPerNight.toFixed(2)} per night </p>
+            <div class="room-cost">
+              <p>from $${room.costPerNight.toFixed(2)}</p>
+              <p>average per night <p>
+            </div>
           </article>
-          <button class="book-now-button" id="book-now-button">BOOK NOW</button>
         </section>`;
   });
-}
-
-function bookRoom(event) {
-  event.preventDefault();
-  hide(customerInfoDisplay);
-  let bookingDate = arrivalDate.value.split('-').join('/');
-  let bookingRoomNumber = Number(event.target.closest('section').id);
-  addBooking(bookingRoomNumber, currentCustomer.id, bookingDate)
-    .then(hotel.returnCustomerBookings())
-    .then(hotel.calculateCustomerBookingsTotals());
+  console.log('this is render available bookings');
 }
