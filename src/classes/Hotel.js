@@ -20,7 +20,6 @@ class Hotel {
     this.currentCustomerBooking = this.bookings.filter((booking) => {
       return booking.userID === this.currentCustomer.id;
     });
-    console.log(this.currentCustomerBooking);
   }
 
   calculateCustomerBookingsTotals() {
@@ -51,7 +50,6 @@ class Hotel {
         return room;
       }
     });
-    console.log(availableRooms);
     return availableRooms;
   }
 
@@ -60,11 +58,9 @@ class Hotel {
       arrivalDate,
       departureDate
     );
-    console.log(availableRooms);
     let filteredRooms = availableRooms.filter((room) => {
       return roomType === room.roomType;
     });
-    console.log(filteredRooms);
     return filteredRooms;
   }
 }

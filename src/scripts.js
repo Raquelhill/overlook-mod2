@@ -26,6 +26,7 @@ const rewardsBtn = document.querySelector('.yearly-expense-button');
 const loginForm = document.getElementById('login-form');
 const loginBtn = document.getElementById('login-form-submit');
 const signInBtn = document.getElementById('sign-in-button');
+// const bookNowButton = document.getElementById('book-now-button');
 const loginErrorMsg = document.getElementById('login-error-msg');
 const beachImage = document.querySelector('.beach-image');
 const loginHolder = document.getElementById('login-holder');
@@ -34,11 +35,18 @@ const checkRatesDropDownDisplay = document.querySelector('.dropdown-content');
 const arrivalDate = document.getElementById('arrival');
 const departureDate = document.getElementById('departure');
 const roomType = document.getElementById('room-type');
+const availableRoomsCards = document.querySelector('#availableRoomsCards');
 //create variables for checkin and checkout
 //add query slectore for each calendar checkInDate.value and set it to a varaibles in your check date function
 //use a split and a join to make the values look like API
 
 window.addEventListener('load', returnData);
+customerInfoDisplay.addEventListener('click', function (event) {
+  if (event.target.className === 'book-now-button') {
+    console.log('hello');
+  }
+});
+// bookNowButton.addEventListener('click', hello);
 checkAvailabilityBtn.addEventListener('click', checkAvailability);
 checkRatesBtn.addEventListener('click', renderBookingPage);
 rewardsBtn.addEventListener('click', renderRewardsPage);
@@ -62,7 +70,7 @@ loginBtn.addEventListener('click', (e) => {
 });
 
 //Global variables
-let customerData, roomData, bookingData, currentCustomer, customer, hotel;
+let customerData, roomData, bookingData, currentCustomer, bookingDate, hotel;
 
 function getData() {
   return Promise.all([
@@ -98,11 +106,8 @@ function hide(element) {
 
 function renderBookingPage() {
   show(customerInfoDisplay);
-  checkRatesDropDownDisplay.classList.toggle('show');
-  console.log('this is booking page');
-  customerInfoDisplay.innerHTML = '';
-  customerInfoDisplay.innerHTML += `
-  <p>book hotel page</p>`;
+  show(checkRatesBtn);
+  checkRatesDropDownDisplay.classList.add('show');
 }
 
 function renderSignInForm() {
@@ -137,14 +142,10 @@ function renderReservationsPage() {
             <p>ROOM # ${booking.roomNumber}</p>
             <p>RESERVED</p> 
             <p>${booking.date}</p>
-            <div class="room-cost">
-              <p>from $${reservedRoom.costPerNight.toFixed(2)}</p>
-              <p>average per night <p>
-            </div>
+            <p>from $${reservedRoom.costPerNight.toFixed(2)} per night</p>
           </article>
         </section>`;
   });
-  console.log('this is reservation page');
 }
 
 function renderRewardsPage() {
@@ -190,12 +191,9 @@ function renderAvailableBookings() {
               <li>Twice-daily housekeeping service and evening ice delivery</li>
             </ul> 
             <p>ROOM # ${room.number}</p>
-            <div class="room-cost">
-              <p>from $${room.costPerNight.toFixed(2)}</p>
-              <p>average per night <p>
-            </div>
+            <p>$${room.costPerNight.toFixed(2)} per night </p>
           </article>
+          <button class="book-now-button" id="book-now-button">BOOK NOW</button>
         </section>`;
   });
-  console.log('this is render available bookings');
 }
