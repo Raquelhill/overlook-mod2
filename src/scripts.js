@@ -15,7 +15,7 @@ import Hotel from './classes/Hotel';
 let dayjs = require('dayjs');
 
 // fetch calls & data variables
-import { fetchData, postData } from './apiCalls';
+import { fetchData, updateBookings } from './apiCalls';
 // import domUpdates from './domUpdates';
 const checkAvailabilityBtn = document.querySelector(
   '.check-availability-button'
@@ -43,7 +43,7 @@ const availableRoomsCards = document.querySelector('#availableRoomsCards');
 window.addEventListener('load', returnData);
 customerInfoDisplay.addEventListener('click', function (event) {
   if (event.target.className === 'book-now-button') {
-    console.log('hello');
+    modifyBookingAPI();
   }
 });
 // bookNowButton.addEventListener('click', hello);
@@ -196,4 +196,13 @@ function renderAvailableBookings() {
           <button class="book-now-button" id="book-now-button">BOOK NOW</button>
         </section>`;
   });
+}
+
+function modifyBookingAPI(availableRooms) {
+  Promise.all(
+    availableRooms.map((room) => {
+      updateBookings(userID, date, roomNumber);
+      console.log(room);
+    })
+  );
 }

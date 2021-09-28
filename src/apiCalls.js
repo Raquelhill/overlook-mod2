@@ -1,23 +1,32 @@
 function fetchData(file) {
-  return fetch(`http://localhost:3001/api/v1/${file}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      } else {
-        return response;
-      }
-    })
-    .then((response) => response.json());
+  return fetch(`http://localhost:3001/api/v1/${file}`).then((response) =>
+    response.json()
+  );
 }
 
-function postData(postObject) {
-  return fetch(`http://localhost:3001/api/v1/bookings`, {
+function updateBookings(userID, date, roomNumber) {
+  return fetch('http://localhost:3001/api/v1/users', {
     method: 'POST',
-    body: JSON.stringify(postObject),
+    body: JSON.stringify({
+      userID,
+      date,
+      roomNumber,
+    }),
     headers: {
-      'Content-type': 'application/json',
+      'Content-Type': 'application/json',
     },
-  });
+  })
+    .then((response) => checkResponse(response))
+    .catch((error) => console.warn(error));
 }
 
-export { fetchData, postData };
+function checkResponse(response) {
+  if (!response.ok) {
+    throw new Error(
+      `Status: ${response.status} StatusText: ${response.status.text}`
+    );
+  }
+  return response.json();
+}
+
+export { fetchData, updateBookings };
