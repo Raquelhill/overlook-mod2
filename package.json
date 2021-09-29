@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RAQUELHILL/OVERLOOK-MOD2.git"
+    "url": "git+https://github.com/RAQUELHILL/overlook-mod2 .git",
+    "homepage": "http://RAQUELHILL.github.io/overlook-mod2 "
   },
   "author": "Turing School of Software and Design",
   "license": "MIT",
