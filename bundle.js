@@ -88,13 +88,16 @@ function getData() {
 }
 
 function returnData() {
-  getData().then((promiseArray) => {
-    customerData = promiseArray[0].customers;
-    roomData = promiseArray[1].rooms;
-    bookingData = promiseArray[2].bookings;
-    instantiateData();
-    setMinimumCalendarDate();
-  });
+  getData()
+    .then((promiseArray) => {
+      customerData = promiseArray[0].customers;
+      roomData = promiseArray[1].rooms;
+      bookingData = promiseArray[2].bookings;
+      instantiateData();
+      setMinimumCalendarDate();
+    })
+    .catch((error) => displayErrorMessage(error, customerInfoDisplay));
+  setMinimumCalendarDate();
 }
 
 function instantiateData() {
@@ -155,7 +158,22 @@ function renderRewardsPage() {
 
 function checkAvailability() {
   event.preventDefault();
-  checkForDates();
+  if (!arrivalDate.value) {
+    hide(customerInfoDisplay);
+    show(dateErrorArrival);
+    checkRatesDropDownDisplay.classList.add('show');
+  }
+  if (!departureDate.value) {
+    hide(customerInfoDisplay);
+    show(dateErrorDeparture);
+    checkRatesDropDownDisplay.classList.add('show');
+  }
+  if (departureDate.value && arrivalDate.value) {
+    filterBookings();
+  }
+}
+
+function filterBookings() {
   let arrivalDateInput = arrivalDate.value.split('-').join('/');
   let departureDateInput = departureDate.value.split('-').join('/');
   let selectedRoomType = roomType.value;
@@ -168,22 +186,17 @@ function checkAvailability() {
     arrivalDateInput,
     departureDateInput
   );
-  // renderAvailableBookings();
-}
-
-function checkForDates() {
-  if (!arrivalDate.value) {
-    hide(customerInfoDisplay);
-    show(dateErrorArrival);
-    checkRatesDropDownDisplay.classList.add('show');
-  }
-  if (!departureDate.value) {
-    hide(customerInfoDisplay);
-    show(dateErrorDeparture);
-    checkRatesDropDownDisplay.classList.add('show');
-  }
-  if (departureDate.value && arrivalDate.value) {
+  if (roomData.length > 0) {
     renderAvailableBookings();
+  } else {
+    console.log(roomType.value);
+    show(customerInfoDisplay);
+    checkRatesDropDownDisplay.classList.remove('show');
+    customerInfoDisplay.innerHTML = '';
+    customerInfoDisplay.innerHTML = `
+    <h2> We're sorry, there are no ${roomType.value}'s available for the dates you have requested </h2>
+    <h4> If your dates are flexible, please contact our Worldwide Reservations Office or speak to a hotel reservation agent at 1 (800) 201-9580</h4>
+    `;
   }
 }
 
@@ -203,7 +216,13 @@ function bookRoom(event) {
   let bookingRoomNumber = Number(event.target.closest('section').id);
   (0,_apiCalls__WEBPACK_IMPORTED_MODULE_6__.addBooking)(bookingRoomNumber, currentCustomer.id, bookingDate)
     .then(hotel.returnCustomerBookings())
-    .then(hotel.calculateCustomerBookingsTotals());
+    .then(hotel.calculateCustomerBookingsTotals())
+    .catch((error) => displayErrorMessage(error, customerInfoDisplay));
+}
+
+function displayErrorMessage(error, customerInfoDisplay) {
+  show(customerInfoDisplay);
+  customerInfoDisplay.innerHTML = `<h2> We are sorry, our server is currently on vacation. </h2>`;
 }
 
 function show(element) {
@@ -531,7 +550,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "html {\n  height: 100%;\n}\n\nbody {\n  margin: 0;\n  font-family: \"Lato\", sans-serif;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n  background-color: white;\n}\n\nheader {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  color: #003e93;\n}\n\n.title-container {\n  display: flex;\n  align-items: flex-end;\n  margin-bottom: 2%;\n}\n.title-container .title {\n  padding-left: 2%;\n  margin-bottom: 2%;\n  font-size: 2.4em;\n}\n\n.star-fish {\n  padding-left: 2%;\n  margin-top: 2%;\n}\n\n.sign-in-button {\n  margin-left: 65%;\n  margin-bottom: 4%;\n  background-color: white;\n  border: none;\n  font-size: 1.4em;\n  color: #003e93;\n}\n\n.sign-in-button:hover {\n  color: #209fdf;\n}\n\n.menu-buttons {\n  display: flex;\n  justify-content: flex-end;\n  margin: 0;\n}\n\n.reservation-button,\n.yearly-expense-button {\n  color: #003e93;\n  border: none;\n  background-color: white;\n  font-size: 1.1rem;\n}\n.reservation-button:hover,\n.yearly-expense-button:hover {\n  color: #209fdf;\n}\n\n.dropdown {\n  position: relative;\n  display: inline-block;\n}\n\n.check-rates-button {\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: #e8e8ed;\n  font-family: \"Montserrat\", sans-serif;\n}\n.check-rates-button:hover {\n  background-color: #209fdf;\n  color: white;\n}\n\n.dropbtn {\n  width: 100%;\n  height: 100%;\n  padding: 1.32rem;\n  border: none;\n  background-color: whitesmoke;\n  font-size: 1rem;\n  color: black;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.dropdown-content {\n  display: flex;\n  flex-direction: column;\n  z-index: 1;\n  right: 0;\n  left: auto;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  background-color: #003e93;\n  color: white;\n  min-width: 160px;\n  width: 600%;\n  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\n}\n\nh3 {\n  font-size: 1.9em;\n  margin-bottom: 1.5%;\n}\n\n#arrival {\n  margin-bottom: 1%;\n  font-size: large;\n}\n\n#departure {\n  margin-bottom: 1%;\n  font-size: large;\n}\n\n.filter-by-room-type {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n\n.choose-by-type {\n  font-size: large;\n  width: 78%;\n  height: 1.45em;\n}\n\n.check-availability-button {\n  margin: 15% auto;\n  padding: 1rem;\n  border: none;\n  background-color: white;\n  font-size: 1.1rem;\n  color: #003e93;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.customerInfoDisplay {\n  display: flex;\n  margin-top: 2%;\n}\n\n.hotel-room-cards {\n  color: black;\n  background-color: #ededed;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 2% auto;\n}\n.hotel-room-cards .resort-room-info {\n  padding-left: 2%;\n}\n\n.room-title {\n  font-size: 1.5em;\n  font-weight: bold;\n}\n\n.book-now-button {\n  margin: 34% 1% 0 0;\n  width: 15%;\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: white;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.show {\n  display: flex;\n}\n\n.hidden {\n  display: none;\n}\n\n.login-holder {\n  margin-top: 8%;\n  width: 50%;\n  height: 80%;\n  background-color: #ededed;\n  display: grid;\n  justify-items: center;\n  align-content: center;\n  justify-content: center;\n}\n\n#login-error-msg-holder {\n  width: 100%;\n  height: 100%;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n#login-error-msg {\n  font-size: large;\n  text-align: center;\n  margin: 0;\n  padding: 5px;\n  color: #8a0000;\n  opacity: 0;\n}\n\n#error-msg-second-line {\n  display: block;\n}\n\n#login-form {\n  align-self: flex-start;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n.login-form-field {\n  font-size: large;\n  border: none;\n  margin-bottom: 10px;\n  outline: none;\n  padding: 6px 6px 7px 7px;\n}\n\n.login-form-field::placeholder {\n  color: #3a3a3a;\n}\n\n#login-form-submit {\n  width: 100%;\n  padding: 7px;\n  border: none;\n  color: white;\n  font-weight: bold;\n  font-size: large;\n  background-color: #003e93;\n  cursor: pointer;\n  outline: none;\n  margin-top: 8%;\n}\n\n.hidden {\n  display: none;\n}", "",{"version":3,"sources":["webpack://./src/css/_base.scss","webpack://./src/css/main.scss","webpack://./src/css/_variables.scss","webpack://./src/css/_login-page.scss"],"names":[],"mappings":"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","sourcesContent":["html {\n  height: 100%;\n}\n\nbody {\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n  background-color: $secondary-text;\n}\n\n// HEADER CONTAINER\nheader {\n  @include flex-column;\n  width: 100%;\n  color: $primary-text;\n}\n\n// TITLE CONTAINER\n.title-container {\n  display: flex;\n  align-items: flex-end;\n  margin-bottom: 2%;\n\n  .title {\n    padding-left: 2%;\n    margin-bottom: 2%;\n    font-size: 2.4em;\n  }\n}\n\n.star-fish {\n  padding-left: 2%;\n  margin-top: 2%;\n}\n\n.sign-in-button {\n  margin-left: 65%;\n  margin-bottom: 4%;\n  background-color: $secondary-text;\n  border: none;\n  font-size: 1.4em;\n  color: $primary-text;\n}\n\n.sign-in-button:hover {\n  color: #209fdf;\n}\n\n// MENU BTNS CONTAINER\n.menu-buttons {\n  display: flex;\n  justify-content: flex-end;\n  margin: 0;\n}\n\n.reservation-button,\n.yearly-expense-button {\n  color: $primary-text;\n  border: none;\n  background-color: $secondary-text;\n  font-size: 1.1rem;\n  &:hover {\n    color: #209fdf;\n  }\n}\n\n// DROP DOWN CONTAINER\n.dropdown {\n  position: relative;\n  display: inline-block;\n}\n\n.check-rates-button {\n  padding: 1rem;\n  border: none;\n  background-color: $primary-text;\n  font-size: 1.1rem;\n  color: #e8e8ed;\n  font-family: $primary-font;\n\n  // .check-rates-button:hover\n  &:hover {\n    background-color: #209fdf;\n    color: $secondary-text;\n  }\n}\n\n.dropbtn {\n  width: 100%;\n  height: 100%;\n  padding: 1.32rem;\n  border: none;\n  background-color: whitesmoke;\n  font-size: 1rem;\n  color: black;\n  font-family: $primary-font;\n}\n\n// DROP DOWN FORM\n.dropdown-content {\n  @include flex-column;\n  z-index: 1;\n  right: 0;\n  left: auto;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  background-color: #003e93;\n  color: $secondary-text;\n  min-width: 160px;\n  width: 600%;\n  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\n}\n\nh3 {\n  font-size: 1.9em;\n  margin-bottom: 1.5%;\n}\n\n#arrival {\n  margin-bottom: 1%;\n  font-size: large;\n}\n\n#departure {\n  margin-bottom: 1%;\n  font-size: large;\n}\n\n.filter-by-room-type {\n  @include flex-column;\n  align-items: center;\n}\n\n.choose-by-type {\n  font-size: large;\n  width: 78%;\n  height: 1.45em;\n}\n\n.check-availability-button {\n  margin: 15% auto;\n  padding: 1rem;\n  border: none;\n  background-color: $secondary-text;\n  font-size: 1.1rem;\n  color: #003e93;\n  font-family: $primary-font;\n}\n\n// DISPLAY CONTAINER\n.customerInfoDisplay {\n  display: flex;\n  margin-top: 2%;\n}\n\n// HOTEL ROOM CARDS\n.hotel-room-cards {\n  color: black;\n  background-color: #ededed;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 2% auto;\n\n  .resort-room-info {\n    padding-left: 2%;\n  }\n}\n\n// CUSTOMER INFO SECTION in DOM\n.room-title {\n  font-size: 1.5em;\n  font-weight: bold;\n}\n\n.book-now-button {\n  margin: 34% 1% 0 0;\n  width: 15%;\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: $secondary-text;\n  font-family: $primary-font;\n}\n\n.show {\n  display: flex;\n}\n\n.hidden {\n  display: none;\n}\n","html {\n  height: 100%;\n}\n\nbody {\n  margin: 0;\n  font-family: \"Lato\", sans-serif;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n  background-color: white;\n}\n\nheader {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  color: #003e93;\n}\n\n.title-container {\n  display: flex;\n  align-items: flex-end;\n  margin-bottom: 2%;\n}\n.title-container .title {\n  padding-left: 2%;\n  margin-bottom: 2%;\n  font-size: 2.4em;\n}\n\n.star-fish {\n  padding-left: 2%;\n  margin-top: 2%;\n}\n\n.sign-in-button {\n  margin-left: 65%;\n  margin-bottom: 4%;\n  background-color: white;\n  border: none;\n  font-size: 1.4em;\n  color: #003e93;\n}\n\n.sign-in-button:hover {\n  color: #209fdf;\n}\n\n.menu-buttons {\n  display: flex;\n  justify-content: flex-end;\n  margin: 0;\n}\n\n.reservation-button,\n.yearly-expense-button {\n  color: #003e93;\n  border: none;\n  background-color: white;\n  font-size: 1.1rem;\n}\n.reservation-button:hover,\n.yearly-expense-button:hover {\n  color: #209fdf;\n}\n\n.dropdown {\n  position: relative;\n  display: inline-block;\n}\n\n.check-rates-button {\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: #e8e8ed;\n  font-family: \"Montserrat\", sans-serif;\n}\n.check-rates-button:hover {\n  background-color: #209fdf;\n  color: white;\n}\n\n.dropbtn {\n  width: 100%;\n  height: 100%;\n  padding: 1.32rem;\n  border: none;\n  background-color: whitesmoke;\n  font-size: 1rem;\n  color: black;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.dropdown-content {\n  display: flex;\n  flex-direction: column;\n  z-index: 1;\n  right: 0;\n  left: auto;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  background-color: #003e93;\n  color: white;\n  min-width: 160px;\n  width: 600%;\n  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\n}\n\nh3 {\n  font-size: 1.9em;\n  margin-bottom: 1.5%;\n}\n\n#arrival {\n  margin-bottom: 1%;\n  font-size: large;\n}\n\n#departure {\n  margin-bottom: 1%;\n  font-size: large;\n}\n\n.filter-by-room-type {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n\n.choose-by-type {\n  font-size: large;\n  width: 78%;\n  height: 1.45em;\n}\n\n.check-availability-button {\n  margin: 15% auto;\n  padding: 1rem;\n  border: none;\n  background-color: white;\n  font-size: 1.1rem;\n  color: #003e93;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.customerInfoDisplay {\n  display: flex;\n  margin-top: 2%;\n}\n\n.hotel-room-cards {\n  color: black;\n  background-color: #ededed;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 2% auto;\n}\n.hotel-room-cards .resort-room-info {\n  padding-left: 2%;\n}\n\n.room-title {\n  font-size: 1.5em;\n  font-weight: bold;\n}\n\n.book-now-button {\n  margin: 34% 1% 0 0;\n  width: 15%;\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: white;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.show {\n  display: flex;\n}\n\n.hidden {\n  display: none;\n}\n\n.login-holder {\n  margin-top: 8%;\n  width: 50%;\n  height: 80%;\n  background-color: #ededed;\n  display: grid;\n  justify-items: center;\n  align-content: center;\n  justify-content: center;\n}\n\n#login-error-msg-holder {\n  width: 100%;\n  height: 100%;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n#login-error-msg {\n  font-size: large;\n  text-align: center;\n  margin: 0;\n  padding: 5px;\n  color: #8a0000;\n  opacity: 0;\n}\n\n#error-msg-second-line {\n  display: block;\n}\n\n#login-form {\n  align-self: flex-start;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n.login-form-field {\n  font-size: large;\n  border: none;\n  margin-bottom: 10px;\n  outline: none;\n  padding: 6px 6px 7px 7px;\n}\n\n.login-form-field::placeholder {\n  color: #3a3a3a;\n}\n\n#login-form-submit {\n  width: 100%;\n  padding: 7px;\n  border: none;\n  color: white;\n  font-weight: bold;\n  font-size: large;\n  background-color: #003e93;\n  cursor: pointer;\n  outline: none;\n  margin-top: 8%;\n}\n\n.hidden {\n  display: none;\n}","$secondary-text: white;\n$primary-text: #003e93;\n$primary-font: 'Montserrat', sans-serif;\n\n@mixin flex-column() {\n  display: flex;\n  flex-direction: column;\n  // align-items: $placement;\n}\n\n@mixin grid-center() {\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n","// LOGIN PAGE\n.login-holder {\n  margin-top: 8%;\n  width: 50%;\n  height: 80%;\n  background-color: #ededed;\n  display: grid;\n  justify-items: center;\n  align-content: center;\n  justify-content: center;\n}\n\n#login-error-msg-holder {\n  width: 100%;\n  height: 100%;\n  @include grid-center;\n}\n\n#login-error-msg {\n  font-size: large;\n  text-align: center;\n  margin: 0;\n  padding: 5px;\n  color: #8a0000;\n  opacity: 0;\n}\n\n#error-msg-second-line {\n  display: block;\n}\n\n#login-form {\n  align-self: flex-start;\n  @include grid-center;\n}\n\n.login-form-field {\n  font-size: large;\n  border: none;\n  margin-bottom: 10px;\n  outline: none;\n  padding: 6px 6px 7px 7px;\n}\n\n.login-form-field::placeholder {\n  color: #3a3a3a;\n}\n\n#login-form-submit {\n  width: 100%;\n  padding: 7px;\n  border: none;\n  color: $secondary-text;\n  font-weight: bold;\n  font-size: large;\n  background-color: $primary-text;\n  cursor: pointer;\n  outline: none;\n  margin-top: 8%;\n}\n\n.hidden {\n  display: none;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "html {\n  height: 100%;\n}\n\nbody {\n  margin: 0;\n  font-family: \"Lato\", sans-serif;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n  background-color: white;\n}\n\nheader {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  color: #003e93;\n}\n\n.title-container {\n  display: flex;\n  align-items: flex-end;\n  margin-bottom: 2%;\n}\n.title-container .title {\n  padding-left: 2%;\n  font-size: 3em;\n}\n\n.star-fish {\n  padding-left: 2%;\n  margin-top: 2%;\n}\n\n.sign-in-button {\n  margin-left: 62%;\n  margin-bottom: 4%;\n  background-color: white;\n  border: none;\n  font-size: 1.4em;\n  color: #003e93;\n}\n\n.sign-in-button:hover {\n  color: #209fdf;\n}\n\n.menu-buttons {\n  display: flex;\n  justify-content: flex-end;\n  margin: 0;\n}\n\n.reservation-button,\n.yearly-expense-button {\n  color: #003e93;\n  border: none;\n  background-color: white;\n  font-size: 1.3em;\n  margin-left: 1%;\n  margin-right: 1%;\n}\n.reservation-button:hover,\n.yearly-expense-button:hover {\n  color: #209fdf;\n}\n\n.dropdown {\n  position: relative;\n  display: inline-block;\n}\n\n.check-rates-button {\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.3em;\n  color: #e8e8ed;\n  font-family: \"Montserrat\", sans-serif;\n}\n.check-rates-button:hover {\n  background-color: #209fdf;\n  color: white;\n}\n\n.dropbtn {\n  width: 100%;\n  height: 100%;\n  padding: 1.32rem;\n  border: none;\n  background-color: whitesmoke;\n  font-size: 1rem;\n  color: black;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.dropdown-content {\n  display: flex;\n  flex-direction: column;\n  z-index: 1;\n  right: 0;\n  left: auto;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  background-color: #003e93;\n  color: white;\n  min-width: 160px;\n  width: 600%;\n  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\n}\n\nh3 {\n  font-size: 1.9em;\n  margin-bottom: 1.5%;\n}\n\n#arrival {\n  margin-bottom: 1%;\n  font-size: 1.3em;\n}\n\n.date-error-arrival {\n  font-size: 1.1em;\n  margin-top: 0%;\n}\n\n#departure {\n  margin-bottom: 1%;\n  font-size: 1.3em;\n}\n\n.date-error-departure {\n  font-size: 1.1em;\n  margin-top: 0%;\n}\n\n.filter-by-room-type {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n\n.choose-by-type {\n  font-size: large;\n  width: 78%;\n  height: 1.45em;\n}\n\n.check-availability-button {\n  margin: 15% auto;\n  padding: 1rem;\n  border: none;\n  background-color: white;\n  font-size: 1.1rem;\n  color: #003e93;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.customer-info-display {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  margin-top: 2%;\n}\n\n.hotel-room-cards {\n  color: black;\n  background-color: #ededed;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 2% auto;\n}\n.hotel-room-cards .resort-room-info {\n  padding-left: 2%;\n}\n\n.room-title {\n  font-size: 1.5em;\n  font-weight: bold;\n}\n\n.book-now-button {\n  margin: 34% 1% 0 0;\n  width: 15%;\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: white;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.show {\n  display: flex;\n}\n\n.hidden {\n  display: none;\n}\n\n.login-holder {\n  margin-top: 8%;\n  width: 50%;\n  height: 110%;\n  background-color: #ededed;\n  display: grid;\n  justify-items: center;\n  align-content: center;\n  justify-content: center;\n}\n\n#login-error-msg-holder {\n  width: 100%;\n  height: 100%;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n#login-error-msg {\n  font-size: large;\n  text-align: center;\n  margin: 0;\n  padding: 5px;\n  color: #8a0000;\n  opacity: 0;\n}\n\n#error-msg-second-line {\n  display: block;\n}\n\n#login-form {\n  align-self: flex-start;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n.login-form-field {\n  font-size: large;\n  border: none;\n  margin-bottom: 10px;\n  outline: none;\n  padding: 6px 6px 7px 7px;\n}\n\n.login-form-field::placeholder {\n  color: #3a3a3a;\n}\n\n#login-form-submit {\n  width: 100%;\n  padding: 7px;\n  border: none;\n  color: white;\n  font-weight: bold;\n  font-size: large;\n  background-color: #003e93;\n  cursor: pointer;\n  outline: none;\n  margin-top: 8%;\n}\n\n.hidden {\n  display: none;\n}", "",{"version":3,"sources":["webpack://./src/css/_base.scss","webpack://./src/css/main.scss","webpack://./src/css/_variables.scss","webpack://./src/css/_login-page.scss"],"names":[],"mappings":"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","sourcesContent":["html {\n  height: 100%;\n}\n\nbody {\n  margin: 0;\n  font-family: 'Lato', sans-serif;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n  background-color: $secondary-text;\n}\n\n// HEADER CONTAINER\nheader {\n  @include flex-column;\n  width: 100%;\n  color: $primary-text;\n}\n\n// TITLE CONTAINER\n.title-container {\n  display: flex;\n  align-items: flex-end;\n  margin-bottom: 2%;\n\n  .title {\n    padding-left: 2%;\n    font-size: 3em;\n  }\n}\n\n.star-fish {\n  padding-left: 2%;\n  margin-top: 2%;\n}\n\n.sign-in-button {\n  margin-left: 62%;\n  margin-bottom: 4%;\n  background-color: $secondary-text;\n  border: none;\n  font-size: 1.4em;\n  color: $primary-text;\n}\n\n.sign-in-button:hover {\n  color: #209fdf;\n}\n\n// MENU BTNS CONTAINER\n.menu-buttons {\n  display: flex;\n  justify-content: flex-end;\n  margin: 0;\n}\n\n.reservation-button,\n.yearly-expense-button {\n  color: $primary-text;\n  border: none;\n  background-color: $secondary-text;\n  font-size: 1.3em;\n  margin-left: 1%;\n  margin-right: 1%;\n  &:hover {\n    color: #209fdf;\n  }\n}\n\n// DROP DOWN CONTAINER\n.dropdown {\n  position: relative;\n  display: inline-block;\n}\n\n.check-rates-button {\n  padding: 1rem;\n  border: none;\n  background-color: $primary-text;\n  font-size: 1.3em;\n  color: #e8e8ed;\n  font-family: $primary-font;\n\n  // .check-rates-button:hover\n  &:hover {\n    background-color: #209fdf;\n    color: $secondary-text;\n  }\n}\n\n.dropbtn {\n  width: 100%;\n  height: 100%;\n  padding: 1.32rem;\n  border: none;\n  background-color: whitesmoke;\n  font-size: 1rem;\n  color: black;\n  font-family: $primary-font;\n}\n\n// DROP DOWN FORM\n.dropdown-content {\n  @include flex-column;\n  z-index: 1;\n  right: 0;\n  left: auto;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  background-color: #003e93;\n  color: $secondary-text;\n  min-width: 160px;\n  width: 600%;\n  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\n}\n\nh3 {\n  font-size: 1.9em;\n  margin-bottom: 1.5%;\n}\n\n#arrival {\n  margin-bottom: 1%;\n  font-size: 1.3em;\n}\n\n.date-error-arrival {\n  @include date-error-message;\n}\n\n#departure {\n  margin-bottom: 1%;\n  font-size: 1.3em;\n}\n\n.date-error-departure {\n  @include date-error-message;\n}\n\n.filter-by-room-type {\n  @include flex-column;\n  align-items: center;\n}\n\n.choose-by-type {\n  font-size: large;\n  width: 78%;\n  height: 1.45em;\n}\n\n.check-availability-button {\n  margin: 15% auto;\n  padding: 1rem;\n  border: none;\n  background-color: $secondary-text;\n  font-size: 1.1rem;\n  color: #003e93;\n  font-family: $primary-font;\n}\n\n// DISPLAY CONTAINER\n.customer-info-display {\n  @include flex-column;\n  align-items: center;\n  margin-top: 2%;\n}\n\n// HOTEL ROOM CARDS\n.hotel-room-cards {\n  color: black;\n  background-color: #ededed;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 2% auto;\n\n  .resort-room-info {\n    padding-left: 2%;\n  }\n}\n\n// CUSTOMER INFO SECTION in DOM\n.room-title {\n  font-size: 1.5em;\n  font-weight: bold;\n}\n\n.book-now-button {\n  margin: 34% 1% 0 0;\n  width: 15%;\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: $secondary-text;\n  font-family: $primary-font;\n}\n\n.show {\n  display: flex;\n}\n\n.hidden {\n  display: none;\n}\n","html {\n  height: 100%;\n}\n\nbody {\n  margin: 0;\n  font-family: \"Lato\", sans-serif;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n  background-color: white;\n}\n\nheader {\n  display: flex;\n  flex-direction: column;\n  width: 100%;\n  color: #003e93;\n}\n\n.title-container {\n  display: flex;\n  align-items: flex-end;\n  margin-bottom: 2%;\n}\n.title-container .title {\n  padding-left: 2%;\n  font-size: 3em;\n}\n\n.star-fish {\n  padding-left: 2%;\n  margin-top: 2%;\n}\n\n.sign-in-button {\n  margin-left: 62%;\n  margin-bottom: 4%;\n  background-color: white;\n  border: none;\n  font-size: 1.4em;\n  color: #003e93;\n}\n\n.sign-in-button:hover {\n  color: #209fdf;\n}\n\n.menu-buttons {\n  display: flex;\n  justify-content: flex-end;\n  margin: 0;\n}\n\n.reservation-button,\n.yearly-expense-button {\n  color: #003e93;\n  border: none;\n  background-color: white;\n  font-size: 1.3em;\n  margin-left: 1%;\n  margin-right: 1%;\n}\n.reservation-button:hover,\n.yearly-expense-button:hover {\n  color: #209fdf;\n}\n\n.dropdown {\n  position: relative;\n  display: inline-block;\n}\n\n.check-rates-button {\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.3em;\n  color: #e8e8ed;\n  font-family: \"Montserrat\", sans-serif;\n}\n.check-rates-button:hover {\n  background-color: #209fdf;\n  color: white;\n}\n\n.dropbtn {\n  width: 100%;\n  height: 100%;\n  padding: 1.32rem;\n  border: none;\n  background-color: whitesmoke;\n  font-size: 1rem;\n  color: black;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.dropdown-content {\n  display: flex;\n  flex-direction: column;\n  z-index: 1;\n  right: 0;\n  left: auto;\n  display: none;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  background-color: #003e93;\n  color: white;\n  min-width: 160px;\n  width: 600%;\n  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);\n}\n\nh3 {\n  font-size: 1.9em;\n  margin-bottom: 1.5%;\n}\n\n#arrival {\n  margin-bottom: 1%;\n  font-size: 1.3em;\n}\n\n.date-error-arrival {\n  font-size: 1.1em;\n  margin-top: 0%;\n}\n\n#departure {\n  margin-bottom: 1%;\n  font-size: 1.3em;\n}\n\n.date-error-departure {\n  font-size: 1.1em;\n  margin-top: 0%;\n}\n\n.filter-by-room-type {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n\n.choose-by-type {\n  font-size: large;\n  width: 78%;\n  height: 1.45em;\n}\n\n.check-availability-button {\n  margin: 15% auto;\n  padding: 1rem;\n  border: none;\n  background-color: white;\n  font-size: 1.1rem;\n  color: #003e93;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.customer-info-display {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  margin-top: 2%;\n}\n\n.hotel-room-cards {\n  color: black;\n  background-color: #ededed;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  margin: 2% auto;\n}\n.hotel-room-cards .resort-room-info {\n  padding-left: 2%;\n}\n\n.room-title {\n  font-size: 1.5em;\n  font-weight: bold;\n}\n\n.book-now-button {\n  margin: 34% 1% 0 0;\n  width: 15%;\n  padding: 1rem;\n  border: none;\n  background-color: #003e93;\n  font-size: 1.1rem;\n  color: white;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.show {\n  display: flex;\n}\n\n.hidden {\n  display: none;\n}\n\n.login-holder {\n  margin-top: 8%;\n  width: 50%;\n  height: 110%;\n  background-color: #ededed;\n  display: grid;\n  justify-items: center;\n  align-content: center;\n  justify-content: center;\n}\n\n#login-error-msg-holder {\n  width: 100%;\n  height: 100%;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n#login-error-msg {\n  font-size: large;\n  text-align: center;\n  margin: 0;\n  padding: 5px;\n  color: #8a0000;\n  opacity: 0;\n}\n\n#error-msg-second-line {\n  display: block;\n}\n\n#login-form {\n  align-self: flex-start;\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n.login-form-field {\n  font-size: large;\n  border: none;\n  margin-bottom: 10px;\n  outline: none;\n  padding: 6px 6px 7px 7px;\n}\n\n.login-form-field::placeholder {\n  color: #3a3a3a;\n}\n\n#login-form-submit {\n  width: 100%;\n  padding: 7px;\n  border: none;\n  color: white;\n  font-weight: bold;\n  font-size: large;\n  background-color: #003e93;\n  cursor: pointer;\n  outline: none;\n  margin-top: 8%;\n}\n\n.hidden {\n  display: none;\n}","$secondary-text: white;\n$primary-text: #003e93;\n$primary-font: 'Montserrat', sans-serif;\n\n@mixin flex-column() {\n  display: flex;\n  flex-direction: column;\n  // align-items: $placement;\n}\n\n@mixin grid-center() {\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\n\n@mixin date-error-message() {\n  font-size: 1.1em;\n  margin-top: 0%;\n}\n","// LOGIN PAGE\n.login-holder {\n  margin-top: 8%;\n  width: 50%;\n  height: 110%;\n  background-color: #ededed;\n  display: grid;\n  justify-items: center;\n  align-content: center;\n  justify-content: center;\n}\n\n#login-error-msg-holder {\n  width: 100%;\n  height: 100%;\n  @include grid-center;\n}\n\n#login-error-msg {\n  font-size: large;\n  text-align: center;\n  margin: 0;\n  padding: 5px;\n  color: #8a0000;\n  opacity: 0;\n}\n\n#error-msg-second-line {\n  display: block;\n}\n\n#login-form {\n  align-self: flex-start;\n  @include grid-center;\n}\n\n.login-form-field {\n  font-size: large;\n  border: none;\n  margin-bottom: 10px;\n  outline: none;\n  padding: 6px 6px 7px 7px;\n}\n\n.login-form-field::placeholder {\n  color: #3a3a3a;\n}\n\n#login-form-submit {\n  width: 100%;\n  padding: 7px;\n  border: none;\n  color: $secondary-text;\n  font-weight: bold;\n  font-size: large;\n  background-color: $primary-text;\n  cursor: pointer;\n  outline: none;\n  margin-top: 8%;\n}\n\n.hidden {\n  display: none;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -736,7 +755,7 @@ class Hotel {
       }
       return acc;
     }, 0);
-    return bookingTotal.toFixed(2);
+    return bookingTotal.toLocaleString();
   }
 
   returnAvailableRoomsByDate(arrivalDate, departureDate) {
@@ -804,8 +823,7 @@ function addBooking(room, customer, date) {
     },
   })
     .then((response) => response.json())
-    .then((response) => _scripts_js__WEBPACK_IMPORTED_MODULE_0__.bookingData.push(response.newBooking))
-    .catch((error) => console.warn(error));
+    .then((response) => _scripts_js__WEBPACK_IMPORTED_MODULE_0__.bookingData.push(response.newBooking));
 }
 
 function checkResponse(response) {
@@ -828,6 +846,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _sample_data_sample_room_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+
+
 const checkAvailabilityBtn = document.querySelector(
   '.check-availability-button'
 );
@@ -873,8 +894,8 @@ const domUpdates = {
 
   renderAvailableRewards(hotel) {
     customerInfoDisplay.innerHTML = `
-    <p>You have spent $${hotel.calculateCustomerBookingsTotals()} this year.</p>
-    <p>You have ${hotel.calculateCustomerBookingsTotals()} points to redeem for future stays</p>`;
+    <h2>You have spent $${hotel.calculateCustomerBookingsTotals()} this year</h2>
+    <h2>You have ${hotel.calculateCustomerBookingsTotals()} points to redeem for future stays</h2>`;
   },
 
   renderAvailableBookingCards(room) {
@@ -918,6 +939,60 @@ const domUpdates = {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (domUpdates);
+
+
+/***/ }),
+/* 13 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const sampleRoomData = [
+  {
+    number: 1,
+    roomType: 'residential suite',
+    bidet: true,
+    bedSize: 'queen',
+    numBeds: 1,
+    costPerNight: 358.4,
+  },
+  {
+    number: 2,
+    roomType: 'suite',
+    bidet: false,
+    bedSize: 'full',
+    numBeds: 2,
+    costPerNight: 477.38,
+  },
+  {
+    number: 3,
+    roomType: 'single room',
+    bidet: false,
+    bedSize: 'king',
+    numBeds: 1,
+    costPerNight: 491.14,
+  },
+  {
+    number: 4,
+    roomType: 'single room',
+    bidet: false,
+    bedSize: 'queen',
+    numBeds: 1,
+    costPerNight: 429.44,
+  },
+  {
+    number: 5,
+    roomType: 'single room',
+    bidet: true,
+    bedSize: 'queen',
+    numBeds: 2,
+    costPerNight: 340.17,
+  },
+];
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (sampleRoomData);
 
 
 /***/ })
