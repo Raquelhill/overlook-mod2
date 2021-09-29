@@ -4,7 +4,7 @@ import './images/transparent-starfish.png';
 import './images/resort-room.png';
 import Customer from './classes/Customer';
 import Hotel from './classes/Hotel';
-import { addBooking, fetchData, updateBookings } from './apiCalls';
+import { addBooking, fetchData } from './apiCalls';
 import domUpdates from './domUpdates';
 
 const {
@@ -66,20 +66,20 @@ export function getData() {
 }
 
 export function returnData() {
-  getData().then((promiseArray) => {
-    customerData = promiseArray[0].customers;
-    roomData = promiseArray[1].rooms;
-    bookingData = promiseArray[2].bookings;
-    instantiateData();
-  });
+  getData()
+    .then((promiseArray) => {
+      customerData = promiseArray[0].customers;
+      roomData = promiseArray[1].rooms;
+      bookingData = promiseArray[2].bookings;
+      instantiateData();
+    })
+    .catch((error) => displayErrorMessage(error, customerInfoDisplay));
 }
 
 function instantiateData() {
   let customers = customerData.map((customer) => {
     return new Customer(customer);
   });
-
-  console.log(customers);
   hotel = new Hotel(roomData, bookingData, customers);
 }
 
@@ -146,7 +146,14 @@ function bookRoom(event) {
   let bookingRoomNumber = Number(event.target.closest('section').id);
   addBooking(bookingRoomNumber, currentCustomer.id, bookingDate)
     .then(hotel.returnCustomerBookings())
-    .then(hotel.calculateCustomerBookingsTotals());
+    .then(hotel.calculateCustomerBookingsTotals())
+    .catch((error) => displayErrorMessage(error, customerInfoDisplay));
+  show(customerInfoDisplay);
+}
+
+function displayErrorMessage(error, container) {
+  show(customerInfoDisplay);
+  container.innerHTML = `<h2> We are sorry, our server is currently on vacation. </h2>`;
 }
 
 function show(element) {
