@@ -48,7 +48,7 @@ const domUpdates = {
   renderAvailableBookingCards(room) {
     customerInfoDisplay.innerHTML += `
         <section class="hotel-room-cards" id="${room.number}">
-        <img class="hotel-room-image" src="./images/resort-room.png" alt"=beach-front-hotel-room">
+        <img class="hotel-room-image" src="./images/resort-room.png" alt="beach-front-hotel-room">
           <article class="resort-room-info">
             <p class="room-title"> OCEANVIEW ${room.roomType.toUpperCase()}</p>
             <p>BED OPTIONS</p>
@@ -62,7 +62,7 @@ const domUpdates = {
             <p>ROOM # ${room.number}</p>
             <p>$${room.costPerNight.toFixed(2)} per night </p>
           </article>
-          <button class="book-now-button" id="book-now-button">BOOK NOW</button>
+          <button class="book-now-button">BOOK NOW</button>
         </section>`;
   },
 
