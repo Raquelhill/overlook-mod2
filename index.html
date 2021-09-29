@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
+  <title>TAYLOR BAY BEACH CLUB</title>
+</head>
+<body>
+  <header>
+    <div class="title-container">
+      <img class="star-fish" src="./images/transparent-starfish.png" alt="blue star fish" height="110em">
+      <h1 class="title">TAYLOR BAY BEACH CLUB</h1>
+      <button class="sign-in-button" id="sign-in-button">My Profile</button>
+    </div>
+    <nav>
+      <menu class ="menu-buttons">
+        <button class="reservation-button hidden" id="reservation-button">Reservations</button>
+        <button class="yearly-expense-button hidden" id="yearly-expense-button">Rewards Status</button>
+        <div class="dropdown">
+          <button class="check-rates-button hidden" aria-label="Right Dropdown Menu">CHECK RATES</button>
+          <form class="dropdown-content">
+            <h3>SELECT DATES</h3>
+            <label class="arrival-date" for="trip-start">ARRIVAL</label>
+            <input type="date" id="arrival" name="trip-start" min="today" max="2022-12-31">
+              <p class="date-error-arrival hidden">Please select an arrival date</p>
+            <label class ="departure-date" for="trip-end">DEPARTURE</label>
+            <input type="date" id="departure" name="trip-end" min="today" max="2022-12-31">
+            <p class="date-error-departure hidden">Please select a departure date</p>
+            <section class="filter-by-room-type">
+              <label for="room-type">ROOM TYPE</label>
+              <select class="choose-by-type button" aria-label="room-type-dropdown" label="filter-by-room-type" id="room-type">
+                <option value="single room">STUDIO</option>
+                <option value="junior suite">JUNIOR SUITE</option>
+                <option value="suite">1 BEDROOM SUITE</option>
+                <option value="residential suite">RESIDENTIAL SUITE</option>
+              </select>
+              <button class="check-availability-button" id="check-availability-button" type="submit">CHECK AVAILABILITY</>
+          </form> 
+      </menu>
+    </nav>
+    <img class="beach-image" src="./images/turks-beach.png" alt="white sand beach" height="600em">
+  </header>
+    <main class ="login-holder hidden" id="login-holder">
+      <h1 id="login-header">Welcome back</h1>
+      <div id="login-error-msg-holder">
+        <p id="login-error-msg">Your username and/or password was not found in our records <span id="error-msg-second-line">Please try signing in again </span></p>
+      </div>
+      <form id="login-form">
+        <input type="text" name="username" id="username-field" class="login-form-field" placeholder="Username">
+        <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Password">
+        <input type="submit" value="Sign In" id="login-form-submit">
+      </form>
+    </main>
+    <section class="customer-info-display hidden" id="customer-info-display"></section>
+  <script src="bundle.js"></script>
+</body>
+</html>
