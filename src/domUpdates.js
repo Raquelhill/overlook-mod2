@@ -1,3 +1,5 @@
+import sampleRoomData from './sample-data/sample-room-data';
+
 const checkAvailabilityBtn = document.querySelector(
   '.check-availability-button'
 );
@@ -43,8 +45,8 @@ const domUpdates = {
 
   renderAvailableRewards(hotel) {
     customerInfoDisplay.innerHTML = `
-    <p>You have spent $${hotel.calculateCustomerBookingsTotals()} this year.</p>
-    <p>You have ${hotel.calculateCustomerBookingsTotals()} points to redeem for future stays</p>`;
+    <h2>You have spent $${hotel.calculateCustomerBookingsTotals()} this year</h2>
+    <h2>You have ${hotel.calculateCustomerBookingsTotals()} points to redeem for future stays</h2>`;
   },
 
   renderAvailableBookingCards(room) {

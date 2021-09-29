@@ -137,7 +137,22 @@ function renderRewardsPage() {
 
 function checkAvailability() {
   event.preventDefault();
-  checkForDates();
+  if (!arrivalDate.value) {
+    hide(customerInfoDisplay);
+    show(dateErrorArrival);
+    checkRatesDropDownDisplay.classList.add('show');
+  }
+  if (!departureDate.value) {
+    hide(customerInfoDisplay);
+    show(dateErrorDeparture);
+    checkRatesDropDownDisplay.classList.add('show');
+  }
+  if (departureDate.value && arrivalDate.value) {
+    filterBookings();
+  }
+}
+
+function filterBookings() {
   let arrivalDateInput = arrivalDate.value.split('-').join('/');
   let departureDateInput = departureDate.value.split('-').join('/');
   let selectedRoomType = roomType.value;
@@ -150,21 +165,17 @@ function checkAvailability() {
     arrivalDateInput,
     departureDateInput
   );
-}
-
-function checkForDates() {
-  if (!arrivalDate.value) {
-    hide(customerInfoDisplay);
-    show(dateErrorArrival);
-    checkRatesDropDownDisplay.classList.add('show');
-  }
-  if (!departureDate.value) {
-    hide(customerInfoDisplay);
-    show(dateErrorDeparture);
-    checkRatesDropDownDisplay.classList.add('show');
-  }
-  if (departureDate.value && arrivalDate.value) {
+  if (roomData.length > 0) {
     renderAvailableBookings();
+  } else {
+    console.log(roomType.value);
+    show(customerInfoDisplay);
+    checkRatesDropDownDisplay.classList.remove('show');
+    customerInfoDisplay.innerHTML = '';
+    customerInfoDisplay.innerHTML = `
+    <h2> We're sorry, there are no ${roomType.value}'s available for the dates you have requested </h2>
+    <h4> If your dates are flexible, please contact our Worldwide Reservations Office or speak to a hotel reservation agent at 1 (800) 201-9580</h4>
+    `;
   }
 }
 
