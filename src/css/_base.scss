@@ -126,9 +126,17 @@ h3 {
   font-size: large;
 }
 
+.date-error-arrival {
+  @include date-error-message;
+}
+
 #departure {
   margin-bottom: 1%;
   font-size: large;
+}
+
+.date-error-departure {
+  @include date-error-message;
 }
 
 .filter-by-room-type {

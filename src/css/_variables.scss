@@ -13,3 +13,8 @@ $primary-font: 'Montserrat', sans-serif;
   justify-items: center;
   align-items: center;
 }
+
+@mixin date-error-message() {
+  font-size: 1.1em;
+  margin-top: 0%;
+}

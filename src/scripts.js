@@ -186,12 +186,11 @@ function bookRoom(event) {
     .then(hotel.returnCustomerBookings())
     .then(hotel.calculateCustomerBookingsTotals())
     .catch((error) => displayErrorMessage(error, customerInfoDisplay));
-  show(customerInfoDisplay);
 }
 
-function displayErrorMessage(container) {
+function displayErrorMessage(error, customerInfoDisplay) {
   show(customerInfoDisplay);
-  container.innerHTML = `<h2> We are sorry, our server is currently on vacation. </h2>`;
+  customerInfoDisplay.innerHTML = `<h2> We are sorry, our server is currently on vacation. </h2>`;
 }
 
 function show(element) {
