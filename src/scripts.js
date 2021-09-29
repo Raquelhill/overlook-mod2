@@ -78,8 +78,6 @@ function instantiateData() {
   let customers = customerData.map((customer) => {
     return new Customer(customer);
   });
-
-  console.log(customers);
   hotel = new Hotel(roomData, bookingData, customers);
 }
 
