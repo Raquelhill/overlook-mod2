@@ -31,7 +31,7 @@ const sampleBookingData = [
     id: '5fwrgu4i7k55hl6t8',
     userID: 1,
     date: '2020/02/05',
-    roomNumber: 12,
+    roomNumber: 3,
     roomServiceCharges: [],
   },
 ];
