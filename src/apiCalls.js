@@ -20,8 +20,7 @@ function addBooking(room, customer, date) {
     },
   })
     .then((response) => response.json())
-    .then((response) => bookingData.push(response.newBooking))
-    .catch((error) => console.warn(error));
+    .then((response) => bookingData.push(response.newBooking));
 }
 
 function checkResponse(response) {
