@@ -15,6 +15,8 @@ const checkRatesDropDownDisplay = document.querySelector('.dropdown-content');
 const arrivalDate = document.getElementById('arrival');
 const departureDate = document.getElementById('departure');
 const roomType = document.getElementById('room-type');
+const dateErrorArrival = document.querySelector('.date-error-arrival');
+const dateErrorDeparture = document.querySelector('.date-error-departure');
 
 const domUpdates = {
   renderAvailableRoomCards(reservedRoom, booking) {
@@ -81,6 +83,8 @@ const domUpdates = {
   arrivalDate,
   departureDate,
   roomType,
+  dateErrorArrival,
+  dateErrorDeparture,
 };
 
 export default domUpdates;

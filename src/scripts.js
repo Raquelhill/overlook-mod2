@@ -23,6 +23,8 @@ const {
   arrivalDate,
   departureDate,
   roomType,
+  dateErrorArrival,
+  dateErrorDeparture,
 } = domUpdates;
 
 let customerData, roomData, currentCustomer, hotel;
@@ -71,6 +73,7 @@ export function returnData() {
     roomData = promiseArray[1].rooms;
     bookingData = promiseArray[2].bookings;
     instantiateData();
+    setMinimumCalendarDate();
   });
 }
 
@@ -79,6 +82,24 @@ function instantiateData() {
     return new Customer(customer);
   });
   hotel = new Hotel(roomData, bookingData, customers);
+}
+
+function setMinimumCalendarDate() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  today = yyyy + '-' + mm + '-' + dd;
+  document.getElementById('arrival').setAttribute('min', today);
 }
 
 function renderBookingPage() {
@@ -114,6 +135,7 @@ function renderRewardsPage() {
 
 function checkAvailability() {
   event.preventDefault();
+  checkForDates();
   let arrivalDateInput = arrivalDate.value.split('-').join('/');
   let departureDateInput = departureDate.value.split('-').join('/');
   let selectedRoomType = roomType.value;
@@ -126,10 +148,27 @@ function checkAvailability() {
     arrivalDateInput,
     departureDateInput
   );
-  renderAvailableBookings();
+  // renderAvailableBookings();
+}
+
+function checkForDates() {
+  if (!arrivalDate.value) {
+    hide(customerInfoDisplay);
+    show(dateErrorArrival);
+    checkRatesDropDownDisplay.classList.add('show');
+  }
+  if (!departureDate.value) {
+    hide(customerInfoDisplay);
+    show(dateErrorDeparture);
+    checkRatesDropDownDisplay.classList.add('show');
+  }
+  if (departureDate.value && arrivalDate.value) {
+    renderAvailableBookings();
+  }
 }
 
 function renderAvailableBookings() {
+  show(customerInfoDisplay);
   checkRatesDropDownDisplay.classList.remove('show');
   customerInfoDisplay.innerHTML = '';
   roomData.forEach((room) => {
