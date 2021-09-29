@@ -32,7 +32,7 @@ class Hotel {
       }
       return acc;
     }, 0);
-    return bookingTotal.toFixed(2);
+    return bookingTotal.toLocaleString();
   }
 
   returnAvailableRoomsByDate(arrivalDate, departureDate) {
