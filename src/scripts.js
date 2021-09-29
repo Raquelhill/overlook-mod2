@@ -74,6 +74,7 @@ export function returnData() {
       roomData = promiseArray[1].rooms;
       bookingData = promiseArray[2].bookings;
       instantiateData();
+      setMinimumCalendarDate();
     })
     .catch((error) => displayErrorMessage(error, customerInfoDisplay));
   setMinimumCalendarDate();
